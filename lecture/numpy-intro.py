@@ -126,7 +126,46 @@ b = np.array([4, 5, 6])
 dot_product = np.dot(a, b) # 32
 
 # 랜덤 함수
-np.random.seed(42) # 특정 seed 값에 따라 난수 생성
-a = np.random.randint(1, 21, 10) # 1~20 까지 랜덤 숫자 10개
+np.random.seed(2025) # 특정 seed 값에 따라 난수 생성
+a = np.random.randint(1, 101, 20) # 1~20 까지 랜덤 숫자 10개
 # array([ 7, 20, 15, 11,  8,  7, 19, 11, 11,  4], dtype=int32)
+
+# 조건에 따른 필터링
+a[a > 50]
+
+'''
+Q1
+시드는 2025 고정
+- 고객 데이터 만들기 (나이 20~80)
+- 무작위 고객 3000명
+- 40세 이상 고객 명 수 구하기
+- 40대 고객 명 수 구하기
+'''
+np.random.seed(2025)
+customer_age = np.random.randint(20, 81, 3000)
+over_40_under_50 = customer_age[(customer_age >= 40) & (customer_age < 50)]
+over_40_under_50.shape
+over_40 = customer_age[customer_age >= 40]
+over_40.shape
+
+
+# 벡터 슬라이싱 예제
+a = np.array([5, 3, 1, 10, 24, 3])
+a > 5   # array([False, False, False,  True,  True, False])
+a[a > 5]
+
+# 논리 연산자 활용
+a = np.array([True, True, False])
+b = np.array([False, True, False])
+a & b   # array([False,  True, False])
+a | b   # array([True,  True, False])
+
+# 필터링 + 논리 연산자
+a = np.array([5, 3, 1, 10, 24, 3])
+a[(a > 5) & (a < 15)]
+
+# 필터링을 이용한 벡터 변경
+a = np.array([5, 10, 15, 20, 25, 30])
+a[a >= 10] = 10
+a   # array([ 5,  3,  1, 10, 10,  3])
 
