@@ -164,8 +164,119 @@ a | b   # array([True,  True, False])
 a = np.array([5, 3, 1, 10, 24, 3])
 a[(a > 5) & (a < 15)]
 
+# 1에서 300 사이 숫자들 중에서 7의 배수의 합을 구하세요
+a = np.arange(1, 301)
+result = a[a % 7 == 0].sum()
+
+# 랜덤 함수에서 각 숫자가 나올 확률이 같은가?
+np.random.seed(2025)
+a = np.random.randint(1, 4, 3000)
+a[a == 1].size, a[a == 2].size, a[a == 3].size
+np.random.rand(1)   # 실수 버전
+
+vec3 = np.random.rand(10 ** 9)      # 10억개로 테스트
+vec3[vec3 > 0.5].size / 10 ** 9     # 표본이 커질수록 신뢰도가 높아짐
+
+
+# 조건을 만족하는 위치 탐색
+a = np.array([5, 3, 1, 10, 24, 3])
+result = np.where(a < 7)    # (array([0, 1, 2, 5]),) index 반환
+
+# np.where(조건, 참일 때 값, 거짓일 때 값)
+result = np.where(a < 7, "7미만", "7이상")
+
 # 필터링을 이용한 벡터 변경
 a = np.array([5, 10, 15, 20, 25, 30])
 a[a >= 10] = 10
 a   # array([ 5,  3,  1, 10, 10,  3])
+
+'''
+[고객 데이터 만들기]
+1. 3000명에 대해 성별 벡터를 만들어 보세요.
+2. 0: 남자, 1: 여자
+3. 50%, 50% 비율
+4. 0과 1로 된 벡터를 "남자", "여자" 로 바꾸세요.
+'''
+np.random.seed(2025)
+customer_size = 3000
+gender = np.random.randint(0, 2, customer_size)
+gender = np.where(gender == 0, "남자", "여자")
+gender[gender == "남자"].size / customer_size, gender[gender == "여자"].size / customer_size
+
+# 나이 벡터 생성 
+age = np.random.randint(20, 81, customer_size)
+
+# 나이 벡터에서 여자에 해당하는 나이들은 어떻게 걸러낼까?
+age[gender == "여자"]   # Boolean Indexing
+
+# 여자 고객 평균 나이
+age[gender == "여자"].mean()    # np.array 의 내장 메서드
+np.mean(age[gender == "여자"])   # numpy 전역 메서드
+age[gender == "남자"].mean()
+
+# 각 연령대별 평균 나이 계산해주세요 (80세는 70대로 설정)
+age_20 = age[age < 30].mean()
+age_30 = age[(age >= 30) & (age < 40)].mean()
+age_40 = age[(age >= 40) & (age < 50)].mean() 
+age_50 = age[(age >= 50) & (age < 60)].mean()
+age_60 = age[(age >= 60) & (age < 70)].mean()
+age_70 = age[(age >= 70)].mean()
+age_20, age_30, age_40, age_50, age_60, age_70
+
+# 성별 연령대별 평균 구매액 구하기 (2030, 4050, 6070)
+price = np.random.normal(50000, 3000, customer_size)     # normal : 정규분포를 따르는 난수 생성 (평균, 표준편차, 데이터개수)
+mean_price_2030_m = price[(age < 40) & (gender == "남자")].mean()
+mean_price_2030_w = price[(age < 40) & (gender == "여자")].mean()
+mean_price_4050_m = price[(age >= 40) & (age < 60) & (gender == "남자")].mean()
+mean_price_4050_w = price[(age >= 40) & (age < 60) & (gender == "여자")].mean()
+mean_price_6070_m = price[(age >= 60) & (gender == "남자")].mean()
+mean_price_6070_w = price[(age >= 60) & (gender == "여자")].mean()
+
+# 총 구매액
+total_price_2030_m = price[(age < 40) & (gender == "남자")].sum()
+total_price_2030_w = price[(age < 40) & (gender == "여자")].sum()
+total_price_4050_m = price[(age >= 40) & (age < 60) & (gender == "남자")].sum()
+total_price_4050_w = price[(age >= 40) & (age < 60) & (gender == "여자")].sum()
+total_price_6070_m = price[(age >= 60) & (gender == "남자")].sum()
+total_price_6070_w = price[(age >= 60) & (gender == "여자")].sum()
+
+# 평균 구매액이 가장 높은 그룹은?
+age_labels = np.array(["2030 남자", "2030 여자", "4050 남자", "4050 여자", "6070 남자", "6070 여자"])
+mean_age_group = np.array([mean_price_2030_m, mean_price_2030_w, mean_price_4050_m, mean_price_4050_w, mean_price_6070_m, mean_price_6070_w])
+total_age_group = np.array([total_price_2030_m, total_price_2030_w, total_price_4050_m, total_price_4050_w, total_price_6070_m, total_price_6070_w])
+print("평균 구매액 최대 그룹: ", age_labels[np.argmax(mean_age_group)])     # argmax: 최대값의 인덱스를 알려줌
+print("총 구매액 최대 그룹: ", age_labels[np.argmax(total_age_group)])     # argmax: 최대값의 인덱스를 알려줌
+
+
+'''
+벡터 함수 사용하기
+'''
+a = np.array([1, 2, 3, 4, 5])
+sum_a = np.sum(a)
+mean_a = np.mean(a)
+median_a = np.median(a) # 중앙값 계산
+std_a = np.std(a, ddof = 1) # 표준 편차, ddof: 자유도 (기본값: 0 -> 모집단)
+var_a = np.var(a, ddof = 1) # 분산
+
+# 데이터 타입 (기본값: float64)
+a = np.array([1, 2, 3], dtype=np.int32)
+a = np.array([1.5, 2, 3], dtype=np.int32)   # array([1, 2, 3], dtype=int32)
+a = np.array([1.5, 2, 3], dtype=np.float64) # array([1.5, 2. , 3. ])
+a = np.array([1.5, 0, 3], dtype=np.bool_)   # array([ True, False,  True])
+
+gender = np.random.randint(0, 2, 3000)
+gender = np.array(gender, dtype=np.str_)
+gender[gender == "0"] = "남자"
+gender[gender == "1"] = "여자"
+
+# nan : not a number (float 타입)
+a = np.array([20, np.nan, 13, 24, 309])
+np.mean(a)      # nan
+np.nanmean(a)   # 91.5
+a_filtered = a[~np.isnan(a)]    # nan이 생략된 벡터 만들기
+b = np.array([20, None, 13, 24, 309])  # None 은 연산자체가 불가능
+
+a = np.array([20, np.nan, 13, 24, 309])
+a[np.isnan(a)] = np.nanmean(a)  # nan 값을 평균값으로 대체
+
 
