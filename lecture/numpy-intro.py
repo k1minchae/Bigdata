@@ -280,3 +280,64 @@ a = np.array([20, np.nan, 13, 24, 309])
 a[np.isnan(a)] = np.nanmean(a)  # nan 값을 평균값으로 대체
 
 
+a = np.array([1, 2, 3, 4])
+b = np.array([1, 2]).reshape(2, 1)  # 2차원 배열로 바뀜
+
+# 브로드캐스팅은 차원이 작은 쪽(1차원) -> 큰 쪽으로 확장된다.
+# a가 2차원으로 확장되면서 덧셈이 가능해짐
+
+print(a + b)
+print("=============")
+print(b + a)
+print("============")
+print(a, b)
+
+str_vec = np.array(["사과", "수박", "배", "참외"])
+str_vec[[0, 2, 1, 0]]   # 여러개의 인덱스에 한번에 접근할 수 있다.
+
+# 여러 벡터들 묶기
+mix_vec = np.array(["사과", 12, "수박", "참외"], dtype=str)
+combined_vec = np.concatenate((str_vec, mix_vec))
+combined_vec
+
+# column_stack() : 세로 쌓기
+col_stacked = np.column_stack((np.arange(1, 5), np.arange(12, 16)))
+
+# vstack() : 가로 쌓기
+row_stacked = np.vstack((np.arange(1, 5), np.arange(12, 16)))
+row_stacked
+
+
+# 길이가 다른 벡터 합치기
+a = np.arange(1, 5)
+b = np.arange(12, 18)
+a = np.resize(a, len(b))    # 강제로 길이 맞춰주기 (값을 앞에서부터 채워줌)
+uneven_stacked = np.column_stack((a, b))
+
+
+# select() : 여러개의 조건 처리
+x = np.array([1, -2, 3, -4, 0])
+conditions = [x > 0, x == 0, x < 0]
+    # [array([ True, False,  True, False, False]),
+    #  array([False, False, False, False,  True]),
+    #  array([False,  True, False,  True, False])]
+
+choices = ["양수", "0", "음수"]     # 조건과 결과 list 의 길이가 같아야함
+result = np.select(conditions, choices, default="기타")
+print(result)
+
+
+# 고객 데이터 실습
+np.random.seed(2025)
+customer_size = 3000
+age = np.random.randint(20, 81, customer_size)
+gender = np.random.randint(0, 2, customer_size)
+price = np.random.normal(50000, 3000, customer_size)
+
+# 1: 고객 연령층 (2030, 4050, 6070, 80) 벡터 만들기
+conditions = [(age >= 20) & (age < 40), # 2030
+              (age >= 40) & (age < 60), # 4050
+              (age >= 60) & (age < 80)] # 6070
+choices = ["20-30대", "40-50대", "60-70대"]
+age_group = np.select(conditions, choices, "80대 이상")
+
