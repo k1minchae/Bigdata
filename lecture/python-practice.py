@@ -207,7 +207,7 @@ sales_data = {
 sum_sales = 0
 max_sales = 0
 top_month = 0
-for eng, data in sales_data:
+for eng, data in sales_data.items():
     if data >= 100:
         print("판매량 100 이상인 월: ", eng)
     sum_sales += data
