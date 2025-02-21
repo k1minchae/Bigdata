@@ -216,7 +216,7 @@ for eng, data in sales_data.items():
         top_month = eng
 print("연간 총 판매량: ", sum_sales)
 print("연 평균 판매량 : ", sum_sales / 12)
-print("판매량이 가장 높은 월 : ", eng, " 판매량: ", max_sales)
+print("판매량이 가장 높은 월 : ", top_month, " 판매량: ", max_sales)
 
 # 문제 8 : 제품 리뷰 분석
 reviews = [
