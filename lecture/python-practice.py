@@ -255,6 +255,8 @@ print("단어 단위로 분리한 리뷰 list: ", word_review)
 print("5글자 이상만 모은 리뷰 list: ", over_5)
 print("가장 많이 등장한 단어: ", max_word, f" 는 {max_cnt} 번 등장")
 
+# list comprehension 을 이용한 코드로 refactoring
+a = [review.upper() for review in reviews if "EXCELLENT" in review.upper()]
 
 # 문제 9 : 학생 성적 분석
 grades = {
