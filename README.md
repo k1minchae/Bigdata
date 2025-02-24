@@ -2,8 +2,14 @@
 
 **2025.02.17 ~ 2025.06.20**
 
-[1일차 : 파이썬 기초 학습](lecture/python-practice.py)
+### 1. Python
 
-[2일차 : numpy 기초 학습](lecture/numpy-intro.py)
+[Python 기초 학습](lecture/python-intro.py)
 
-[4일차 : python 함수와 반복문](lecture/python-function-loop.py`)
+[Python 연습 문제 풀이](lecture/python-function-loop.py)
+
+### 2. Numpy
+
+[Numpy 기초 학습](lecture/numpy-intro.py)
+
+[Numpy 연습 문제 풀이](lecture/numpy-practice.py)
