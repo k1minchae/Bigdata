@@ -1,60 +1,3 @@
-import math
-print("hello")
-
-a = 3
-a += 10
-print(a)
-
-x = 10
-x /= 3
-print(x, type(x))
-
-a = 100
-a += 10
-a -= 20
-a //= 2
-print(a)
-
-result = 10 + 2 * 3 ** 2 / 6 - (4 + 2) ** 2
-print(result)
-
-# True == 1, False == 0
-# 나중에 벡터 연산을 할 때 연산을 빨리 하는 것이 중요함 -> 숫자로 바꿔서 계산
-
-print(True and True)
-print(True and False)
-print(False and True)
-print(False and False)
-print(False * False) # and 는 곱셈과 같다
-
-True or False
-False or True
-False + True
-False + False
-True or True # True
-True + True # 2
-min(1, True + True) # 1
-
-# 멤버십 연산자
-my_list = [1, 2, 3, 4, 5]
-print(3 in my_list)
-
-my_str = "Python programming"
-"Python" in my_str
-
-# 할당 연산자
-x = [1, 2, 3]
-y = [1, 2, 3]
-x == y # True
-x is y # False
-
-z = x
-x is z # True
-y is z # False
-
-my_list[2:4]
-
-
 # 문제 1 : 리스트에서 최대 곱 계산
 numbers = [1, 10, 3, -5, 7, -10]
 n = len(numbers)
@@ -298,3 +241,98 @@ print("평균점수 내림차순: ", avg_scores)
 
 # 5 특정 과목 math의 최고 점수를 가진 학생의 이름을 출력하세요
 print("math 의 최고점수인 학생: ", best_student.get("math", "null"))
+
+
+
+'''
+연습문제 1: 함수 정의와 기본값 설정
+1. 함수 이름: add_numbers
+2. 입력값: 두개의 숫자 a, b (기본값: a=1, b=2)
+3. 출력값: 두 숫자의 합
+
+기본값을 사용한 결과와 a = 5, b = 7일 때 결과를 각각 출력하세요.
+'''
+def add_numbers(a=1, b=2):
+    return a + b
+
+print(add_numbers())  # 3
+print(add_numbers(5, 7))  # 12
+
+
+'''
+연습문제 2: 조건문 사용
+1. 함수이름: check_sign
+2. 입력값: 하나의 숫자 x
+3. 출력값: x가 양수면 "양수", 음수면 "음수", 0이면 "0"
+
+숫자 10, -5, 0에 대해 함수를 호출하고 결과를 출력하세요
+예시: 10: 양수
+'''
+def check_sign(x):
+    if x > 0:
+        return f"{x}: 양수"
+    elif x < 0:
+        return f"{x}: 음수"
+    else:
+        return f"{x}: 0"
+
+print(check_sign(10))
+print(check_sign(-5))
+print(check_sign(0))
+
+
+'''
+연습문제 3: 반복문 사용
+
+1. 1부터10까지 숫자를 출력하는 함수를 작성하세요
+- 함수 이름: print_numbers
+- 출력값: 1부터10까지의 숫자를 줄바꿈하여 출력
+
+2. 함수를 호출하여 결과를 확인하세요
+
+'''
+def print_numbers():
+    for i in range(1, 11):
+        print(i)
+print_numbers()
+
+
+'''
+연습문제 4: 중첩 함수 사용
+
+1. 다음 요구사항에 맞는 함수를 작성하세요
+- 함수 이름: outer_function
+- 내부에 inner_function을 정의하고 inner_function은 입력값에2를 더한 값을 반환
+- outer_function은 inner_function을 호출하여 결과를 반환
+
+2. 숫자5를 입력값으로 outer_function을 호출하고 결과를 출력하세요
+
+'''
+
+def outer_function():
+    def inner_function(x):
+        return x + 2
+    return inner_function(5)
+
+print(outer_function())  # 7
+
+
+'''
+연습문제 5: while 반복문과 break
+
+1. 다음 요구사항에 맞는 함수를 작성하세요
+- 함수 이름: find_even
+- 입력값: 시작 숫자 start
+- 동작: start부터 시작하여 처음으로 나오는 짝수를 반환
+- 짝수를 찾으면 break로 반복문 종료
+
+2. 함수에 start = 3을 입력하여 호출하고 결과를 출력하세요
+
+'''
+def find_even(start):
+    while True:
+        if start % 2 == 0:
+            return start
+        start += 1
+
+find_even(3)  # 4
