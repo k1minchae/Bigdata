@@ -55,9 +55,10 @@ c
 
 '''
 a = np.array([1, 3, 3, 2, 1, 3, 4, 2, 2, 2, 5, 6, 6, 6, 6])
+# cnt, val = np.unique(a, return_counts=True)
 counts = np.unique_counts(a).counts
 values = np.unique_counts(a).values
-most = np.where(counts.max() == counts)[0]
+most = counts.max() == counts
 values[most]
 
 
