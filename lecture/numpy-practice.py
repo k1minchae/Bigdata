@@ -49,6 +49,19 @@ c[1::2] = b
 c
 
 '''
+연습 문제 7
+
+주어진 벡터에서 가장 자주 등장하는 숫자를 찾아 출력하세요
+
+'''
+a = np.array([1, 3, 3, 2, 1, 3, 4, 2, 2, 2, 5, 6, 6, 6, 6])
+counts = np.unique_counts(a).counts
+values = np.unique_counts(a).values
+most = np.where(counts.max() == counts)[0]
+values[most]
+
+
+'''
 연습 문제6
 
 다음 a 벡터의 마지막 값은 제외한 두 벡터 a와 b를 더한 결과를 구하세요
