@@ -1,4 +1,8 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import urllib.request
+import imageio
 
 '''
 [벡터 생성하기 예제]
@@ -253,6 +257,10 @@ print("총 구매액 최대 그룹: ", age_labels[np.argmax(total_age_group)])  
 '''
 a = np.array([1, 2, 3, 4, 5])
 sum_a = np.sum(a)
+z = np.array([[1, 2], [3, 4], [5, 6]])
+# 합계 구하기
+z.sum(axis=0)   # 0: 열별 합계, 1: 행별 합계, 안 쓰면 전체합계
+
 mean_a = np.mean(a)
 median_a = np.median(a) # 중앙값 계산
 std_a = np.std(a, ddof = 1) # 표준 편차, ddof: 자유도 (기본값: 0 -> 모집단)
@@ -340,4 +348,164 @@ conditions = [(age >= 20) & (age < 40), # 2030
               (age >= 60) & (age < 80)] # 6070
 choices = ["20-30대", "40-50대", "60-70대"]
 age_group = np.select(conditions, choices, "80대 이상")
+
+
+# 1에서 20까지 채워진 4행 5열을 만들려면?
+np.arange(1, 21).reshape(4, 5)
+np.arange(1, 21).reshape(6, 3)  # 부족해도 에러
+np.arange(1, 21).reshape(5, 5)  # 남아도 에러
+
+# np.arange(1, 21) 을 5, 5 행렬에 넣고싶은 경우는?
+np.resize(np.arange(1, 21), 5 * 5).reshape(5, 5)
+
+# 숫자를 채우는 방향 고르기
+np.arange(1, 21).reshape(4, 5, order="C")   # 가로로 숫자를 채운다
+np.arange(1, 21).reshape(4, 5, order="F")   # 세로로 숫자를 채운다
+
+# 행렬 인덱싱
+x = np.arange(1, 11).reshape((5, 2)) * 2
+x[0, 1] # 행, 열 (0행 1열의 원소 반환)
+x[:, 1] # 1열의 모든 원소 반환
+x[[1, 2, 3], [1]]   # 1행, 2행, 3행에서 1열의 원소를 반환
+
+y = np.arange(1, 21).reshape(4, 5)
+y[2:4, 3]   # 2, 3행에서 3번째열에 있는 원소 반환
+y[2, 1:4]
+y[1:, 2:4]
+y[1:3, [1, 3, 4]]
+
+# 조건문 필터링
+x[x[:, 1] > 15, 0]  # 1열의 원소가 15보다 큰 행의 0열의 원소 
+y[y[:, 0] > 10, :]  # 0번째 열이 10보다 큰 모든 행의 모든 열 원소
+
+# 1에서 20까지 숫자중 랜덤하게 20개의 숫자를 발생후 4행 5열 행렬 만드시오.
+np.random.seed(2025)
+z = np.random.randint(1, 21, 20).reshape(4, 5)
+z
+z[:, 0] > 7 # 참인 행: 0, 2
+z[z[:, 0] > 7, :]   # 0행의 모든 원소, 2행의 모든 원소 필터링
+
+z[2, :] > 10    # 참인 열: 3, 4
+z[:, z[2, :] > 10]  # 전체 배열에서 3, 4열 필터링
+
+
+y[0:2, 1].reshape(2, 1) # reshape 을 안 해도 입력 배열의 차원을 내부적으로 조정
+y[2:, 3:]
+np.column_stack((y[0:2, 1].reshape(2, 1), y[2:, 3:]))
+
+y[:, 0] > 10 # 1차원 np 배열
+
+
+'''
+데이터 필터링 실습
+
+'''
+# 평균 점수 1등 학생의 점수 벡터 출력하기 (행: 학생, 열: 1~5월 모의고사 점수)
+# 1: 행, 0: 열
+z
+z[z.mean(axis=1) == z.mean(axis=1).max(), :]
+
+
+# 모의고사 평균 점수가 10점 이상인 학생들 데이터 필터링
+z[z.mean(axis=1) >= 10, :]
+
+
+# 모의고사 평균 점수가 10점 이상인 학생들 
+# 3월 이후 모의고사 점수 데이터 필터링
+z[z.mean(axis=1) >= 10, 2:]
+
+
+
+a = np.arange(10)
+a[2:6]
+b = np.array([0, 2, 3, 6])
+b > [4, 2, 1, 6]    # array([False, False,  True, False])
+
+
+# 1~5월 모의고사 점수
+# 기존 1월~4월 모의고사 점수 평균보다 
+# 5월 모의고사를 잘 본 학생 데이터 필터링
+z[z[:, :4].mean(axis=1) < z[:, 4], :]
+
+
+'''
+1~5월 모의고사 점수
+기존 1월~4월 모의고사 점수 평균보다 
+5월 모의고사 점수를 비교했을 때 
+가장 점수가 많이 향상된 학생, 
+가장 점수가 떨어진 학생의 
+평균점수, 5월 모의고사 점수를 구하시오.
+'''
+
+# 5월 모의고사 점수 - 1~4월 평균점수
+mean_diff = z[:, -1] - z[:, :-1].mean(axis=1) 
+
+# 가장 많이 향상된 학생/가장 떨어진 학생 구하는 Boolean Array
+best_student = mean_diff == mean_diff.max()   
+worst_student = mean_diff == mean_diff.min()
+
+print(f'{np.argmax(mean_diff) + 1}번째 학생의 평균 점수: {z[best_student, :].mean()}, 5월 모의고사 점수: {z[best_student][0][-1]}')
+print(f'{np.argmin(mean_diff) + 1}번째 학생의 평균 점수: {z[worst_student, :].mean()}, 5월 모의고사 점수: {z[worst_student][0][-1]}')
+
+
+# 사진은 행렬이다 (0: 검은색, 1: 흰색)
+np.random.seed(2024)
+# 데이터 생성 (예시: 3x3 행렬)
+data = np.array([
+ [0, 1, 1, 0, 0, 0, 1, 1, 0],
+ [1, 1, 1, 1, 0, 1, 1, 1, 1],
+ [1, 1, 1, 1, 1, 1, 1, 1, 1],
+ [1, 1, 1, 1, 1, 1, 1, 1, 1],
+ [0, 1, 1, 1, 1, 1, 1, 1, 0],
+ [0, 0, 1, 1, 1, 1, 1, 0, 0],
+ [0, 0, 0, 1, 1, 1, 0, 0, 0]
+])
+img1 = np.random.rand(3, 3)
+print("이미지 행렬 img1: \n", img1)
+plt.figure(figsize=(10, 5))
+plt.imshow(data, cmap='gray', interpolation='nearest')
+plt.colorbar()
+plt.show()
+
+
+# DataFrame으로 변환 후 CSV 파일로 저장
+df = pd.DataFrame(data, columns=["col1", "col2", "col3"])
+df.to_csv("img_mat.csv", index=False)
+print("img_mat.csv 파일이 생성되었습니다.")
+img_mat = np.loadtxt('./img_mat.csv', delimiter=',', skiprows=1)
+
+
+# 이미지 다운로드
+img_url = "https://bit.ly/3ErnM2Q"
+urllib.request.urlretrieve(img_url, "jelly.png")    # urllib 을 통해 사진 다운
+
+# 이미지 읽기
+jelly = imageio.imread("jelly.png") # imageio 를 통해 사진 불러오기
+type(jelly) # array
+jelly.shape # (88, 50, 4: red, green, blue, alpha-투명도)
+plt.imshow(jelly[:, :, 0], cmap='gray', interpolation='nearest')
+
+jelly.max() # 255
+jelly.min() # 0
+jelly[:, :, 0].max()    # 239
+jelly[:, :, 0].min()    # 0
+
+plt.imshow(jelly / 255) # 0~1 로 normalize
+plt.imshow(jelly)
+plt.imshow(jelly[:, :, 0] / 255, cmap='gray', interpolation='nearest')    # 맨 앞면을 잘라온다.
+plt.imshow(jelly[:, :, 1] / 255, cmap='gray', interpolation='nearest')    # 2번째 장을 잘라온다.
+plt.imshow(jelly[:, :, 2] / 255, cmap='gray', interpolation='nearest')    # 3번째 장을 잘라온다.
+plt.imshow(jelly[:, :, 3] / 255, cmap='gray', interpolation='nearest')    # 맨 뒷면을 잘라온다.
+
+
+# 두 개의 2x3 행렬 생성
+mat1 = np.arange(1, 7).reshape(2, 3)
+mat2 = np.arange(7, 13).reshape(2, 3)
+
+# 3차원 배열로 합치기
+my_array = np.array([mat1, mat2])
+my_array.shape # (2, 2, 3)  
+my_array[0, :, :]   # 0번째 2x3
+my_array[1, :, :]   # 1번째 2x3
+my_array[1, 1, 1:]
 
