@@ -604,3 +604,15 @@ np.matmul(new, inv_new)
     - 행렬식값이 0이 아닐 때 역행렬이 존재한다. (non-singular matrix)
 
 '''
+
+
+# 연립방정식과 역행렬
+# 3x + 3y = 1, 2x + 4y = 1을 행렬로 나타내면?
+# A행렬 @ x,y 행렬 = B
+a = np.array([[3, 3], [2, 4]])
+np.linalg.det(a)    # 6 => 역행렬 O
+inv_a = np.linalg.inv(a)
+b = np.array([1, 1])
+inv_a @ b   # array([0.16666667, 0.16666667])   => x: 0.16666667, y: 0.16666667
+
+

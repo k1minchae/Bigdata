@@ -273,3 +273,19 @@ vec1 = np.matmul(np.matmul(a, b), c)
 vec2 = np.matmul(a, np.matmul(b, c))
 np.array_equal(vec1, vec2)  # True
 # 결과 값이 같으므로 계산이 편한 것 먼저 계산해도 된다.
+
+
+# 10. 역행렬과 연립방정식
+a = np.array([3, 2, -1, 2, -2, 4, -1, 0.5, -1]).reshape(3, 3)
+np.linalg.det(a)
+inv_a = np.linalg.inv(a)
+
+b = np.array([1, -2, 0])
+x = np.matmul(inv_a, b) # 해
+
+
+# numpy 배열에 apply 함수 적용
+array_2d = np.arange(1, 13).reshape((3, 4), order='F')
+array_2d.max(axis=0)
+np.apply_along_axis(max, axis=0, arr=array_2d)  
+np.apply_along_axis(np.mean, axis=1, arr=array_2d)     # 내가 만든 함수도 여기에 적용 가능
