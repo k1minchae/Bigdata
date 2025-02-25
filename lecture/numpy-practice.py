@@ -188,9 +188,88 @@ b[np.any(b > 7, axis=1), :]
 
 '''
 
-
 x = np.array([1, 2, 3, 4, 5])
 y = np.array([2, 4, 5, 4, 5])
 
 # 기울기 구하기
 np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)
+
+'''
+2025.02.25 (화)
+'''
+
+
+# 1. 두 행렬의 곱 구하기
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[5, 6], [7, 8]])
+a @ b
+
+
+# 2. 다음 두 행렬을 곱할 수 있는지 확인하고, 가능하면 계산하라.
+a = np.array([[1, 2, 3], [4, 5, 6]])
+b = np.array([[7, 8], [9, 10], [11, 12]])
+a.shape, b.shape    # (2, 3), (3, 2) => 가능
+np.matmul(a, b)
+
+
+# 3. 임의의 정사각 행렬 A와 단위 행렬 I가 주어졌을 때, AI와 IA를 구하고, 원래 행렬과 같은지 확인하라
+a = np.array([[1, 2], [3, 4]])
+i = np.array([[1, 0], [0, 1]])
+ai = a @ i
+ia = i @ a
+np.array_equal(ai, a)   # True
+np.array_equal(ia, a)   # True
+
+
+# 4. 임의의 행렬 A와 영행렬 Z를 곱하면 어떤 결과가 나오는지 확인하라.
+a = np.array([[1, 2], [3, 4]])
+z = np.array([[0, 0], [0, 0]])
+a.dot(z)
+# array([[0, 0],
+#        [0, 0]])
+
+
+# 5. 대각 행렬 D와 행렬 A의 곱을 계산하라.
+d = np.array([[2, 0], [0, 3]])
+a = np.array([[4, 5], [6, 7]])
+d.dot(a)
+# 대각에만 원소가 있는 행렬: 대각행렬
+
+
+# 6. 행렬 A와 벡터 v를 곱하여 결과를 구하라.
+a = np.array([[1, 2], [3, 4], [5, 6]])
+v = np.array([[0.4], [0.6]])
+a.dot(v)    # A행들의 가중평균 값
+
+
+# 7. 3D 행렬(텐서)과 행렬을 곱할수있는지 확인하고 가능하면 계산하라.
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[5, 6], [7, 8]])
+c = np.array([[9, 10], [11, 12]])
+t = np.array([a, b])
+
+np.matmul(t, c)
+# array([[[ 31,  34],
+#         [ 71,  78]],   => np.matmul(a, c)
+
+#        [[111, 122],
+#         [151, 166]]])  => np.matmul(b, c)
+
+
+
+# 8. 대칭 행렬 S가 주어졌을 때 SS의 결과를 확인하세요. S의 역행렬은 어떤 성질을 가지는지 확인하세요.
+s = np.array([[2, -1], [-1, 2]])
+np.linalg.det(s)
+np.linalg.inv(s)        # 역행렬도 대칭이다.
+ss = np.matmul(s, s)    # 결과 값도 대칭이다.
+
+
+# 9. 세 개의 행렬을 차례로 곱하는 연산을 수행하라. (AB)C와 A(BC)의 결과를 비교해보세요!
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[5, 6], [7, 8]])
+c = np.array([[9, 10], [11, 12]])
+
+vec1 = np.matmul(np.matmul(a, b), c)
+vec2 = np.matmul(a, np.matmul(b, c))
+np.array_equal(vec1, vec2)  # True
+# 결과 값이 같으므로 계산이 편한 것 먼저 계산해도 된다.
