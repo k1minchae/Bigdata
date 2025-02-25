@@ -1,3 +1,4 @@
+import numpy as np
 # 문제 1 : 리스트에서 최대 곱 계산
 numbers = [1, 10, 3, -5, 7, -10]
 n = len(numbers)
@@ -336,3 +337,20 @@ def find_even(start):
         start += 1
 
 find_even(3)  # 4
+
+
+# 입력 벡터의 각 원소들을 제곱한 후, 2를 곱하고, 
+# 그 값을 모두 더한 함수를 my_f 라고 정의한 후, 
+# my_f 를 행렬 array_2d의 각 행에 적용해주세요.
+array_2d = np.arange(1, 13).reshape((3, 4), order='F')
+
+def my_f(vec):
+    return sum(vec**2 * 2)
+
+np.apply_along_axis(my_f, 1, array_2d)
+
+
+array_3d = np.arange(1, 25).reshape(2, 4, 3).transpose(0, 2, 1)
+np.apply_along_axis(sum, axis=0, arr=array_3d)  # 레이어 겹친다음에 그상태에서 합
+np.apply_along_axis(sum, axis=1, arr=array_3d)  # 행단위로 잘라서 합침
+np.apply_along_axis(sum, axis=2, arr=array_3d)  # 열단위로 잘라서 합침
