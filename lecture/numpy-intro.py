@@ -472,7 +472,8 @@ plt.show()
 df = pd.DataFrame(data, columns=["col1", "col2", "col3"])
 df.to_csv("img_mat.csv", index=False)
 print("img_mat.csv 파일이 생성되었습니다.")
-img_mat = np.loadtxt('./img_mat.csv', delimiter=',', skiprows=1)
+img_mat = np.loadtxt('img_mat.csv', delimiter=',', skiprows=1)
+img_mat
 
 
 # 이미지 다운로드
@@ -509,3 +510,97 @@ my_array[0, :, :]   # 0번째 2x3
 my_array[1, :, :]   # 1번째 2x3
 my_array[1, 1, 1:]
 
+'''
+행렬의 곱셈 : 앞 열 개수 == 뒷 행 개수 일때 가능 (2, 2) (2, 1) => 가운데 숫자가 같음.
+
+결과 행렬의 모양: 앞 행의 개수, 뒷 열의 개수 (2, 2) (2, 1) => (2, 1)
+
+'''
+
+x = np.array([[2, 7], [1, 2]])
+y = np.array([[0, 2], [3, 1]])
+x.dot(y)
+
+
+x = np.array([[1, 2, 3, 10], [7, 8, 9, 11], [4, 5, 6, 12]])
+y = np.array([[0, 1, -1], [1, 2, 3], [0, 3, 1], [1, 4, 2]])
+x.dot(y)
+
+
+
+# 실습: 중간 고사 성적 데이터
+np.random.seed(2025)
+z = np.random.randint(1, 21, 20).reshape(4, 5)  # 각 학생별 국영수사과 성적
+
+w = np.array([0.1, 0.2, 0.3, 0.1, 0.3])  # 각 과목에 대한 가중치
+weighted_mean = z @ w    # 가중 평균
+z.mean(axis=1)   # 그냥 평균
+
+# 전부 값이 같다.
+a = np.arange(1, 101)
+a.dot(a)    # == a @ a
+sum(a ** 2)
+
+# matmul() 과 비교 : matmul은 딱 행렬의 곱셈만 됨 (브로드캐스트나 내적 이런건 X)
+a
+np.matmul(a, a) # 1D 벡터 x 1D 벡터인 경우만 특별히 내적으로 처리하도록 예외처리
+b = np.arange(1, 101).reshape(1, 100)  # b.shape (100, 1) => 2D
+np.matmul(b, b) # 이건 오류 !!
+
+
+# 3차원 행렬의 곱셈
+matC = np.random.rand(2, 3, 4)
+matD = np.random.rand(2, 4, 5)
+matC.shape, matD.shape  # 3차원 배열
+np.matmul(matC, matD).shape # (2, 3, 5)
+
+
+# 각 원소별 곱셈 (크기가 같은 경우)  !=  행렬의 곱셈
+z = np.arange(10, 14).reshape((2, 2))
+y = np.array([[1, 2], [3, 4]])
+z * y
+
+
+# 행렬의 역행렬 (행렬 세계에서의 역수)
+'''
+역행렬이 없는 경우
+1. 정사각형이 아닌 경우
+2. 선형 종속이 있는 경우
+
+'''
+no_inverse = np.array([[1, 2], [1, 2]]) # 선형 종속 O
+np.linalg.inv(no_inverse)  # np.linalg.LinAlgError: Singular matrix
+
+can_inverse = np.array([[1, 2], [3, 4]]) # 선형 종속 X
+np.linalg.inv(can_inverse)
+# array([[-2. ,  1. ],
+#        [ 1.5, -0.5]])
+np.matmul(can_inverse, np.linalg.inv(can_inverse))  # Identity matrix
+
+
+a = np.array([1, 2, 2, 4]).reshape(2, 2)
+np.linalg.inv(a)    # Singular matrix error
+np.linalg.det(a)    # 0 이 나오면 inverse 가 존재 X
+
+# 성적 데이터
+# z^T z의 역행렬은 존재하나요?
+np.random.seed(2025)
+z = np.random.randint(1, 21, 20).reshape(4, 5)
+z.transpose()
+new = np.matmul(z.transpose(), z)
+np.linalg.det(new)  # np.float64(-4.279112108578448e-06) => 부동소수점 오차 때문에 수치적으로 정확 X
+inv_new = np.linalg.inv(new)
+np.matmul(new, inv_new)
+
+
+'''
+1. n * p 행렬 X 에 대해서 X^T @ X는 항상 정사각형이다.
+2. 데이터를 행렬 X로 보면, X에 가중치 벡터 W 를 곱했을 때, 결과 값은 각 데이터에 가중치를 곱한 것과 같다.
+3. identity matrix (단위행렬: 대각 성분은 1, 나머지는 0) 은 곱셈에서의 1과 같다.
+4. inverse matrix (역행렬) 는 곱셈에서의 역수와 같다. (A^-1 로 표현한다.)
+5. 역행렬은 항상 존재하는 것은 아니다.
+    - 정사각형 모양 행렬만 역행렬이 존재
+    - np.linalg.det() 함수로 행렬식을 구할 수 있다. 
+    - 행렬식값이 0이 아닐 때 역행렬이 존재한다. (non-singular matrix)
+
+'''
