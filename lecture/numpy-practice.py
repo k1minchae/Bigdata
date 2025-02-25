@@ -103,9 +103,12 @@ a[np.median(a) < a]
 
 '''
 a = np.array([12, 45, 8, 20, 33, 50, 19])
-
-nearest = np.argmin(abs(a - np.median(a)))
-a[nearest]
+a_idx = np.where(np.median(a) == a)[0]
+diff = np.abs(a - np.median(a))   # 중앙값과의 차이
+diff[a_idx] = np.nan
+a[np.nanargmin(diff)]
+print(f"중앙값: {np.median(a)}")
+print(f"가장 가까운 값: {a[np.nanargmin(diff)]}")
 
 
 '''
@@ -140,7 +143,7 @@ b[[1, 3, 4], :]
 '''
 연습 문제 13
 
-연습 문제2에서 주어진 행렬B에서3번째 열의 값이3보다 큰 행들만 골라내 보세요
+연습 문제2에서 주어진 행렬 B에서 3번째 열의 값이 3보다 큰 행들만 골라내 보세요
 
 '''
 b[b[:, 2] > 3, :]
@@ -150,7 +153,7 @@ b[b[:, 2] > 3, :]
 연습 문제 14
 주어진 행렬B의 행별로 합계를 내고 싶을 때 rowSums() 함수를 사용
 
-각 행 별 합이20보다 크거나 같은 행 만을 걸러내어 새로운 행렬을 작성해보세요
+각 행 별 합이 20보다 크거나 같은 행 만을 걸러내어 새로운 행렬을 작성해보세요
 
 '''
 row_sums = np.sum(b, axis=1)
@@ -289,3 +292,22 @@ array_2d = np.arange(1, 13).reshape((3, 4), order='F')
 array_2d.max(axis=0)
 np.apply_along_axis(max, axis=0, arr=array_2d)  
 np.apply_along_axis(np.mean, axis=1, arr=array_2d)     # 내가 만든 함수도 여기에 적용 가능
+
+def my_sum(input):
+    return sum(input + 1)
+
+np.apply_along_axis(my_sum, axis=1, arr=array_2d)
+
+
+'''
+주어진 방정식을 활용하여 회귀계수를 구하세요.
+'''
+x = np.array([[2, 4, 6], [1, 7, 2], [7, 8, 12]])
+y = np.array([[10], [5], [15]])
+xt = x.transpose()  # x.T로 써도 됨
+np.linalg.inv(x.T @ x) @ x.T @ y
+
+# 라이브러리 활용해서 구한 값
+# import statmodels.api as sm
+# model = sm.OLS(y, x).fit()
+# print("회귀계수 : ", model.params)
