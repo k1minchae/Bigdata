@@ -55,3 +55,19 @@ y is z # False
 my_list[2:4]
 
 
+
+# while loop 사용, 1~100까지 간격이 1인 수열을 찍어보세요
+i = 1
+while i <= 100:
+    print(i)
+    i += 1
+
+
+# 1~100 사이의 7의배수를 찍어보는 루프 작성 (while & break 활용)
+i = 7
+while True:
+    if i > 100:
+        break
+    
+    print(i)
+    i += 7

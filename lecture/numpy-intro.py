@@ -615,4 +615,33 @@ inv_a = np.linalg.inv(a)
 b = np.array([1, 1])
 inv_a @ b   # array([0.16666667, 0.16666667])   => x: 0.16666667, y: 0.16666667
 
+help(np.arange)
+dir(np.arange)
 
+
+
+np.random.seed(2025)
+customer_size = 3000
+gender = np.random.randint(0, 2, customer_size) # 0남, 1여
+age = np.random.randint(20, 81, customer_size)
+price = np.random.normal(50000, 3000, customer_size)
+
+# 1: 고객 연령층 (2030, 4050, 6070, 80) 벡터 만들기
+conditions = [(age >= 20) & (age < 40), # 2030
+              (age >= 40) & (age < 60), # 4050
+              (age >= 60) & (age < 80)] # 6070
+choices = ["20-30대", "40-50대", "60-70대"]
+age_group = np.select(conditions, choices, "80대 이상")
+
+# price 변경: 구매액 여자인경우 + 1000 하기.
+# gender 벡터를 쭉 훑어보다가 여자인경우 변경하고 남자인 경우에는 건너뛴다.
+# while & continue 이용하기.
+idx = -1
+while idx < len(gender) - 1:
+    idx += 1
+    if gender[idx] == 0:
+        continue
+    price[idx] += 1000
+
+
+# np 활용 : price[gender == 1] += 1000

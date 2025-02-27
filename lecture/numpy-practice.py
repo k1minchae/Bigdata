@@ -169,7 +169,7 @@ np.mean() 함수를 사용하여 알아내는 코드를 작성해보세요
 '''
 
 col_means = np.mean(b, axis=0)
-np.where(col_means >= 5)[0]
+np.where(col_means >= 5)
 
 
 '''
@@ -311,3 +311,22 @@ np.linalg.inv(x.T @ x) @ x.T @ y
 # import statmodels.api as sm
 # model = sm.OLS(y, x).fit()
 # print("회귀계수 : ", model.params)
+
+
+a = np.array([10, 20, 5, 7, 15, 30, 25, 8])
+a[a >= np.median(a)]
+a[a < np.median(a)]
+
+
+# 글로벌 키워드는 한단계 위 환경의 y를 불러내는가?
+# 전체 최상위 환경의 y를 불러낼까? => O
+y = 10
+def outer_f():
+    y = 5
+    def inner_f():
+        global y
+        print("global y: ", y)
+        return y
+    inner_f()
+    return y
+print(outer_f())  # 5

@@ -354,3 +354,108 @@ array_3d = np.arange(1, 25).reshape(2, 4, 3).transpose(0, 2, 1)
 np.apply_along_axis(sum, axis=0, arr=array_3d)  # 레이어 겹친다음에 그상태에서 합
 np.apply_along_axis(sum, axis=1, arr=array_3d)  # 행단위로 잘라서 합침
 np.apply_along_axis(sum, axis=2, arr=array_3d)  # 열단위로 잘라서 합침
+
+# 소스코드 열어보는 모듈
+import inspect
+inspect.getsource(my_f)
+arr = np.arange(10)
+
+def min_max_numbers(arr):
+    max_num = max(arr)
+    min_num = min(arr)
+    return max_num, min_num
+
+min_max_numbers(arr)
+
+np.random.seed(2025)
+array_2d = np.random.randint(1, 13, 12).reshape(3, 4)
+array_2d
+
+np.apply_along_axis(min_max_numbers, 1, array_2d)
+
+
+# 성적 데이터 만들기
+np.random.seed(2025)
+z = np.random.randint(1, 21, 20).reshape(4, 5)
+
+
+# 1~5월 모의고사 성적
+# 4명의 학생이 존재 
+# 각 학생의 점수 최고점, 최저점, 평균을 구해보세요.
+def return_grade(arr):
+    return f'최고점: {np.max(arr)}, 최저점: {np.min(arr)}, 평균: {np.mean(arr)}'
+result = np.apply_along_axis(return_grade, 1, z)
+
+for idx, row in enumerate(result):
+    print(f'{idx + 1}번 학생의', row)
+
+x = 5
+
+# if-else 구문
+if x > 4:
+    y = 1
+else:
+    y = 2
+
+
+# 축약형
+y = 1 if x > 4 else 2
+
+x = [1, -2, 3, -4, 5]
+result = ["양수" if val > 0 else "음수" for val in x]
+
+x = 0
+if x > 0:
+    result = "양수"
+elif x == 0:
+    result = "0"
+else:
+    result = "음수"
+print(result)
+
+
+def num_checker(num):
+    if num > 0:
+        return "양수"
+    if num == 0:
+        return "0"
+    if num < 0:
+        return "음수"
+
+num_checker(-422)
+
+
+# 숫자가 하나 들어왔을 때,
+# 홀수인지 짝수인지 판단하는 함수를 만드시오
+
+def even_odd(num):
+    if type(num) != int:
+        return "int아님"
+    if num % 2:
+        return "홀수"
+    return "짝수"
+
+even_odd(432432)
+even_odd("4213411")
+even_odd("ㅋㅋ")
+
+
+for num in np.arange(7, 101, 7):
+    print(f'{num}은 7의배수')
+
+result = [i ** 2 for i in range(100)]
+
+# 3의 배수를 채워 넣어 보세요.
+result = np.repeat(0, 100)
+for i in np.arange(100):
+    result[i] = 3 * i + 3
+
+for i in np.arange(3, 100, 4):  # step 활용
+    result[i] = 0
+
+for i in range(100):    # if 문 활용
+    if not (i + 1) % 4:
+        result[i] = 0
+
+result[result % 4 == 0] = 0 # 값을 기준으로 4의배수일 때
+
