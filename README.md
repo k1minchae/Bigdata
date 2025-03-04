@@ -14,7 +14,9 @@
 
 [Numpy 연습 문제 풀이](lecture/numpy-practice.py)
 
-### 3. Quarto
+### 3. Pandas
+
+[Pandas 기초 학습](lecture/pandas-intro.py)
 
 ### 4. 기타
 
