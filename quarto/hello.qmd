@@ -1,29 +1,19 @@
 ---
-title: "Quarto Basics"
+title: "민채 Quarto"
 format:
   html:
-    code-fold: true
+    code-fold: false
 jupyter: python3
 ---
 
-For a demonstration of a line plot on a polar axis, see @fig-polar.
+**Preview: Ctrl + Shift + K**
 
-Html 로 내보내는 단축키: Ctrl + Shift + K
 
+
+### Numpy 벡터 연산 학습
 ```{python}
-#| label: fig-polar
-#| fig-cap: "A line plot on a polar axis"
-
 import numpy as np
-import matplotlib.pyplot as plt
-
-r = np.arange(0, 2, 0.01)
-theta = 2 * np.pi * r
-fig, ax = plt.subplots(
-  subplot_kw = {'projection': 'polar'} 
-)
-ax.plot(theta, r)
-ax.set_rticks([0.5, 1, 1.5, 2])
-ax.grid(True)
-plt.show()
+a = np.arange(10)
+b = np.linspace(0, 1, 10)
+a + b
 ```
