@@ -297,6 +297,11 @@ def print_numbers():
         print(i)
 print_numbers()
 
+# 1에서부터 내가 원하는 숫자 (n)까지 정수를 출력하는 함수로 바꾸려면?
+def print_nums(n):
+    for i in range(1, n+1):
+        print(i)
+print_nums(100)
 
 '''
 연습문제 4: 중첩 함수 사용
@@ -310,12 +315,12 @@ print_numbers()
 
 '''
 
-def outer_function():
+def outer_function(x):
     def inner_function(x):
         return x + 2
-    return inner_function(5)
+    return inner_function(x)
 
-print(outer_function())  # 7
+print(outer_function(5))  # 7
 
 
 '''
@@ -338,6 +343,26 @@ def find_even(start):
 
 find_even(3)  # 4
 
+# 처음으로 나오는 n의 배수일 때 return
+def find_times(start, n):
+    while True:
+        if start % n == 0:
+            return start
+        start += 1
+find_times(7, 3)
+
+# 두번째로 나오는 짝수 출력
+def find_second_even(start):
+    cnt = 0
+    while cnt < 2:
+        if start % 2 == 0:
+            cnt += 1
+        start += 1
+    return start - 1
+
+find_second_even(3)  # 6
+find_second_even(4)  # 6
+find_second_even(2)
 
 # 입력 벡터의 각 원소들을 제곱한 후, 2를 곱하고, 
 # 그 값을 모두 더한 함수를 my_f 라고 정의한 후, 
@@ -458,4 +483,33 @@ for i in range(100):    # if 문 활용
         result[i] = 0
 
 result[result % 4 == 0] = 0 # 값을 기준으로 4의배수일 때
+
+
+
+# 얕은복사 판별하기
+a = [1, 2, 3]
+a
+b = a   # b만 바뀜
+c = a[:]
+d = a.copy()
+a[0] = 20
+b, c, d 
+
+a = np.arange(1, 4)
+a
+b = a   # b바뀜
+c = a[:]    # c도 바뀜 (View 개념의 복사)
+d = a.copy()
+a[0] = 20
+b, c, d     # numpy 배열일 경우 슬라이싱을 해도 참조복사가 된다.
+
+# 뷰 (:) 로 만든 객체일 때 판별 => base 속성
+print(a.base)   # None
+print(b.base)   # None
+print(c.base)   # [20  2  3]
+print(d.base)   # None
+
+c.base is a  # True
+
+
 
