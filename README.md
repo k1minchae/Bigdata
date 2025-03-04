@@ -13,3 +13,16 @@
 [Numpy 기초 학습](lecture/numpy-intro.py)
 
 [Numpy 연습 문제 풀이](lecture/numpy-practice.py)
+
+### 3. Quarto
+
+### 4. 기타
+
+1. 소스코드 열어보는 모듈
+
+   ```python
+
+   import inspect
+   inspect.getsource(my_f)
+
+   ```
