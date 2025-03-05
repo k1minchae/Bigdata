@@ -126,6 +126,10 @@ mydata2.iloc[0:2, 0:2]
 mydata.iloc[0, 0]       # 열 1개, 행 1개일 때는 Data 1개가 나옴 np.int64(1)
 mydata.iloc[0, 1]       # str('F')
 mydata.iloc[0:2, 2]     # 열 1개: Series
+mydata.iloc[0:2, 2][0]
+# 시리즈에는 바로 대괄호로 인덱스가 아닌 int 접근 가능하지만 미래에는 지원 X 
+# (label 로 접근해야함)
+# 웬만하면 시리즈도 iloc 으로 접근하자.
 mydata.iloc[[0, 2], 2]  # 행 리스트 형식: Series
 mydata.iloc[0:2, [2]]   # 열 리스트 형식: DataFrame
 mydata.iloc[1, 0:2]     # 행 1개: Series
@@ -154,5 +158,6 @@ check_f = np.array(mydata['gender']) == 'F'  # array([ True, False,  True,...], 
 mydata.iloc[check_f]
 
 # series(bool)을 넣으면 loc으로 필터링 가능
-mydata.loc[mydata['gender'] == 'F']
-
+mydata[mydata['gender'] == 'F', :]      # 에러 발생
+mydata.loc[mydata['gender'] == 'F', :]  # 작동O: DataFrame
+mydata[mydata['gender'] == 'F']         # 작동O: DataFrame
