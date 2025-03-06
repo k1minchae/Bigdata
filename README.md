@@ -20,6 +20,10 @@
 
 [Pandas 강의 2](lecture/pandas-second.py)
 
+### 4. Quarto
+
+[Quarto 기초 학습](quarto/hello.qmd)
+
 ### 4. 기타
 
 1. 소스코드 열어보는 모듈

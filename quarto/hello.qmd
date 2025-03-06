@@ -1,19 +1,97 @@
 ---
-title: "민채 Quarto"
+title: "Quarto 기초 학습"
 format:
   html:
     code-fold: false
 jupyter: python3
 ---
 
-**Preview: Ctrl + Shift + K**
+## QMD 문서 만들기
 
+**Preview: `Ctrl + Shift + K`**
 
+~~물결로 감싸면 취소선~~
 
-### Numpy 벡터 연산 학습
+### 1. 글 중간에 목록을 삽입하고 싶은 경우
+
+-   아이템 1
+-   아이템 2
+-   서브 아이템 1
+-   서브 아이템 2
+
+[링크 걸기](https://www.naver.com/)
+
+<br> <br>
+
+### 2. 이미지 + link
+
+[![](data:image/jpeg;base64,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)](https://www.google.com)
+
+<br> <br>
+
+### 3. 표 삽입
+
+| 이름   | 나이 | 직업 |
+|--------|------|------|
+| 김민채 | 29   | X    |
+
+<br> <br>
+
+### 4. 수식 입력
+
+문장 안에 들어가는 수식은 달러 기호 한 개 `$`를 사용합니다.
+
+이렇게 $E = mc^2$ 말이죠.
+
+만약, 수식만 따로 문단을 만들어서 보여주고 싶은 경우는
+
+달러 기호 2개 `$$`를 사용합니다.
+
+수식 안에서
+
+-   `\\` 는 줄바꿈을 의미합니다.
+-   `&`가 들어있는 부분끼리 정렬을 맞춰줍니다.
+-   정렬 기호가 작동하려면 `\begin{aligned}` 와 `\end{aligned}` 가 필요합니다.
+
+$$
+\begin{aligned}
+  a &= b + c \\
+  &= d + e + f
+\end{aligned}
+$$
+
+<br> <br>
+
+### 5. 글 중간에 코드 삽입하기
+
+**단축키: `ctrl + shift + i`**
+
 ```{python}
 import numpy as np
 a = np.arange(10)
 b = np.linspace(0, 1, 10)
 a + b
 ```
+
+## 
+
+### 6. 비주얼 모드에서 편집하기
+
+우리가 이렇게 문장을 바로 쓰면 ***서식이 적용***되어 나옵니다.
+
+`Ctrl + D` 를 누르면 코드 처리가 됩니다.
+
+Ctrl + Shift + I 를 누르면 이미지를 삽입할 수 있습니다.
+
+
+<br>
+<br>
+
+
+### 7. 테이블 넣기
+
+| Col1  | Col2 | Col3 |
+|-------|------|------|
+| 항목1 |      |      |
+| 항목2 |      |      |
+| 항목3 |      |      |
