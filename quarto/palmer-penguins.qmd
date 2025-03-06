@@ -5,8 +5,8 @@ format:
     toc: true
     number-sections: true
     toc-depth: 3
-    theme: minty
-    highlight-style: atom-one
+    theme: sketch
+    highlight-style: github
     search: true
 jupyter: python3
 ---
@@ -23,7 +23,6 @@ jupyter: python3
 
 <br>
 <br>
-
 
 
 ## 펭귄 데이터 불러오기
@@ -102,7 +101,7 @@ penguins.loc[:, 'species'].unique()
 
 ## 빈도수 데이터 확인
 
-1. 서식지
+### 서식지 정보
 
   |  |**Adelie**|**Gentoo**|**Chinstrap**|
   |----|---------|--------|----|
@@ -112,7 +111,8 @@ penguins.loc[:, 'species'].unique()
 
 <br>
 
-2. 표본
+### 표본
+
 - **Chinstrap** 펭귄이 다른 펭귄들에 비해 표본 데이터 개수가 적다.
 - 대체적으로 성별 데이터는 남여 비율이 일정하지만, 일부 결측치가 존재한다.
 

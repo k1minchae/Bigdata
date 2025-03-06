@@ -63,10 +63,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="palmer-penguins_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="palmer-penguins_files/libs/quarto-html/anchor.min.js"></script>
 <link href="palmer-penguins_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="palmer-penguins_files/libs/quarto-html/quarto-syntax-highlighting-2fa0555fe88427c29efa1b60aaf9e62d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="palmer-penguins_files/libs/quarto-html/quarto-syntax-highlighting-de84f8d6bb715db06a919283c2d1e787.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="palmer-penguins_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="palmer-penguins_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="palmer-penguins_files/libs/bootstrap/bootstrap-b93b94993073aec07b2b0f933d63c7e7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="palmer-penguins_files/libs/bootstrap/bootstrap-81a3e3984041669b288052755459a80a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
@@ -85,7 +85,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#펭귄-데이터-불러오기" id="toc-펭귄-데이터-불러오기" class="nav-link active" data-scroll-target="#펭귄-데이터-불러오기"><span class="header-section-number">1</span> 펭귄 데이터 불러오기</a></li>
   <li><a href="#데이터-결측치-확인" id="toc-데이터-결측치-확인" class="nav-link" data-scroll-target="#데이터-결측치-확인"><span class="header-section-number">2</span> 데이터 결측치 확인</a></li>
   <li><a href="#펭귄의-종류-확인" id="toc-펭귄의-종류-확인" class="nav-link" data-scroll-target="#펭귄의-종류-확인"><span class="header-section-number">3</span> 펭귄의 종류 확인</a></li>
-  <li><a href="#빈도수-데이터-확인" id="toc-빈도수-데이터-확인" class="nav-link" data-scroll-target="#빈도수-데이터-확인"><span class="header-section-number">4</span> 빈도수 데이터 확인</a></li>
+  <li><a href="#빈도수-데이터-확인" id="toc-빈도수-데이터-확인" class="nav-link" data-scroll-target="#빈도수-데이터-확인"><span class="header-section-number">4</span> 빈도수 데이터 확인</a>
+  <ul class="collapse">
+  <li><a href="#서식지-정보" id="toc-서식지-정보" class="nav-link" data-scroll-target="#서식지-정보"><span class="header-section-number">4.1</span> 서식지 정보</a></li>
+  <li><a href="#표본" id="toc-표본" class="nav-link" data-scroll-target="#표본"><span class="header-section-number">4.2</span> 표본</a></li>
+  </ul></li>
   <li><a href="#각-종별-평균-수치-구하기" id="toc-각-종별-평균-수치-구하기" class="nav-link" data-scroll-target="#각-종별-평균-수치-구하기"><span class="header-section-number">5</span> 각 종별 평균 수치 구하기</a></li>
   </ul>
 </nav>
@@ -177,7 +181,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>데이터 타입은 문자열과 숫자형으로 나눠지는군요.</p>
 <p>저희는 문자열은 빈도수로 데이터 패턴을 파악하고, 숫자형은 산술통계를 활용해볼게요!</p>
 <p><img src="https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png" class="img-fluid"></p>
-<div id="18ec8140" class="cell" data-execution_count="1">
+<div id="ab3f5325" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> palmerpenguins <span class="im">import</span> load_penguins</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> load_penguins()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -186,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="데이터-결측치-확인" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="데이터-결측치-확인"><span class="header-section-number">2</span> 데이터 결측치 확인</h2>
 <p>주로 성별데이터에서 결측치가 존재한다.</p>
-<div id="f08ea338" class="cell" data-execution_count="2">
+<div id="5f5d563a" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>nan_check <span class="op">=</span> penguins.isna().<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>err <span class="op">=</span> penguins.loc[(penguins[<span class="st">'sex'</span>].isna()), :]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(err)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -229,9 +233,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Palmer Penguin 데이터에는 Adelie, Gentoo, Chinstrap, 총 3개의 종류가 확인되네요.</p>
 <p>이는 오늘 데이터를 보는 데 있어 대분류 구분자로 활용될 것입니다.</p>
 <p><br></p>
-<div id="e4eb6d3b" class="cell" data-execution_count="3">
+<div id="738fbdb2" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>penguins.loc[:, <span class="st">'species'</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="43">
 <pre><code>array(['Adelie', 'Gentoo', 'Chinstrap'], dtype=object)</code></pre>
 </div>
 </div>
@@ -239,9 +243,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="빈도수-데이터-확인" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="빈도수-데이터-확인"><span class="header-section-number">4</span> 빈도수 데이터 확인</h2>
-<ol type="1">
-<li>서식지</li>
-</ol>
+<section id="서식지-정보" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="서식지-정보"><span class="header-section-number">4.1</span> 서식지 정보</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -273,14 +276,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p><br></p>
-<ol start="2" type="1">
-<li>표본</li>
-</ol>
+</section>
+<section id="표본" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="표본"><span class="header-section-number">4.2</span> 표본</h3>
 <ul>
 <li><strong>Chinstrap</strong> 펭귄이 다른 펭귄들에 비해 표본 데이터 개수가 적다.</li>
 <li>대체적으로 성별 데이터는 남여 비율이 일정하지만, 일부 결측치가 존재한다.</li>
 </ul>
-<div id="b1763a25" class="cell" data-execution_count="4">
+<div id="ffff15b8" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>not_num <span class="op">=</span> penguins.select_dtypes(include<span class="op">=</span>[<span class="st">'object'</span>]).columns</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>group_by_species <span class="op">=</span> penguins.groupby(<span class="st">'species'</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>cnt <span class="op">=</span> {col: group_by_species[col].value_counts() <span class="cf">for</span> col <span class="kw">in</span> not_num}</span>
@@ -307,6 +310,7 @@ Name: count, dtype: int64}</code></pre>
 </div>
 </div>
 <p><br> <br></p>
+</section>
 </section>
 <section id="각-종별-평균-수치-구하기" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="각-종별-평균-수치-구하기"><span class="header-section-number">5</span> 각 종별 평균 수치 구하기</h2>
@@ -349,8 +353,8 @@ Name: count, dtype: int64}</code></pre>
 </ul>
 <p><br></p>
 <p><code>#| echo: false</code> 를 하면 코드는 문서에 들어가지 않고 결과만 나온다. <code>#| code-fold: true</code> 를 하면 코드가 접혀있다.</p>
-<div id="b2b9d8b6" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div id="1356568a" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="45">
 <div>
 
 

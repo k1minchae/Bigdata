@@ -3,6 +3,7 @@ title: "Quarto 기초 학습"
 format:
   html:
     code-fold: false
+    lang: ko
 jupyter: python3
 ---
 
@@ -95,3 +96,36 @@ Ctrl + Shift + I 를 누르면 이미지를 삽입할 수 있습니다.
 | 항목1 |      |      |
 | 항목2 |      |      |
 | 항목3 |      |      |
+
+
+
+<br>
+<br>
+
+
+### 8. 그래프 그리기
+
+**$y = x^2$ 의 그래프를 -10에서 10까지 그려보세요.**
+
+```{python}
+#| code-fold: true
+#| fig-width: 3
+#| fig-height: 5
+#| fig-align: center
+#| fig-cap: "$y=x^2$ 그래프"
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(-10, 10, 100)
+y = x**2
+plt.figure(figsize=(6, 4))
+plt.plot(x, y, label="$x^2$", color="#f3969a")
+plt.legend()
+plt.grid(True)  # 격자
+plt.show()
+
+```
+
+`#| echo: false` 를 하면 코드는 문서에 들어가지 않고 결과만 나온다.
+`#| code-fold: true` 를 하면 코드가 접혀있다.
