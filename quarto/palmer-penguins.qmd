@@ -3,13 +3,17 @@ title: "Palmer Penguins"
 format: 
   html:
     toc: true
+    number-sections: true
     toc-depth: 3
+    theme: minty
+    highlight-style: atom-one
+    search: true
 jupyter: python3
 ---
 
 <br>
 
-**2조: 김규진, 김민채, 김보경**
+<p class="text-secondary">**2조: 김규진, 김민채, 김보경**<p>
 
 <br>
 <br>
@@ -22,7 +26,7 @@ jupyter: python3
 
 
 
-### 1. 펭귄 데이터 불러오기
+## 펭귄 데이터 불러오기
 
 
 | No. | Col               | Dtype   |
@@ -53,7 +57,7 @@ penguins = load_penguins()
 <br>
 <br>
 
-### 2. 데이터 결측치 확인
+## 데이터 결측치 확인
 
 
 주로 성별데이터에서 결측치가 존재한다.
@@ -72,7 +76,7 @@ print(err)
 <br>
 <br>
 
-### 3. 펭귄의 종류 확인
+## 펭귄의 종류 확인
 
 ![](https://forum.posit.co/uploads/default/original/3X/0/b/0ba5d8b2b0621630afc7a53dcff5975ec693d05b.png)
 
@@ -96,7 +100,7 @@ penguins.loc[:, 'species'].unique()
 
 
 
-### 4. 빈도수 데이터 확인
+## 빈도수 데이터 확인
 
 1. 서식지
 
@@ -123,7 +127,7 @@ print(cnt)
 <br>
 <br>
 
-### 5. 각 종별 평균 수치 구하기
+## 각 종별 평균 수치 구하기
 
 ||몸무게|날개 길이|부리 길이|부리 깊이|
 |----| ---- |----|----| ----|
@@ -135,10 +139,20 @@ print(cnt)
 
 <br>
 
+`#| echo: false` 를 하면 코드는 문서에 들어가지 않고 결과만 나온다.
+`#| code-fold: true` 를 하면 코드가 접혀있다.
+
 ```{python}
+#| echo: false
 species_means = penguins.groupby(['species', 'sex']).mean(numeric_only=True)
-print(species_means)
+species_means = round(species_means, 2)
+species_means.columns = ['부리 길이', '부리 깊이', '날개 길이', '몸무게', 'ㅇㅇ']
+species_means = species_means.iloc[:, :-1]
+species_means.index.names = ['종', '성별']
+species_means
 ```
 
 <br>
 <br>
+
+

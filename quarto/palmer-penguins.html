@@ -57,16 +57,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="palmer-penguins_files/libs/clipboard/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="palmer-penguins_files/libs/clipboard/clipboard.min.js"></script>
 <script src="palmer-penguins_files/libs/quarto-html/quarto.js"></script>
 <script src="palmer-penguins_files/libs/quarto-html/popper.min.js"></script>
 <script src="palmer-penguins_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="palmer-penguins_files/libs/quarto-html/anchor.min.js"></script>
 <link href="palmer-penguins_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="palmer-penguins_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="palmer-penguins_files/libs/quarto-html/quarto-syntax-highlighting-2fa0555fe88427c29efa1b60aaf9e62d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="palmer-penguins_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="palmer-penguins_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="palmer-penguins_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="palmer-penguins_files/libs/bootstrap/bootstrap-b93b94993073aec07b2b0f933d63c7e7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -79,11 +82,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#펭귄-데이터-불러오기" id="toc-펭귄-데이터-불러오기" class="nav-link active" data-scroll-target="#펭귄-데이터-불러오기">1. 펭귄 데이터 불러오기</a></li>
-  <li><a href="#데이터-결측치-확인" id="toc-데이터-결측치-확인" class="nav-link" data-scroll-target="#데이터-결측치-확인">2. 데이터 결측치 확인</a></li>
-  <li><a href="#펭귄의-종류-확인" id="toc-펭귄의-종류-확인" class="nav-link" data-scroll-target="#펭귄의-종류-확인">3. 펭귄의 종류 확인</a></li>
-  <li><a href="#빈도수-데이터-확인" id="toc-빈도수-데이터-확인" class="nav-link" data-scroll-target="#빈도수-데이터-확인">4. 빈도수 데이터 확인</a></li>
-  <li><a href="#각-종별-평균-수치-구하기" id="toc-각-종별-평균-수치-구하기" class="nav-link" data-scroll-target="#각-종별-평균-수치-구하기">5. 각 종별 평균 수치 구하기</a></li>
+  <li><a href="#펭귄-데이터-불러오기" id="toc-펭귄-데이터-불러오기" class="nav-link active" data-scroll-target="#펭귄-데이터-불러오기"><span class="header-section-number">1</span> 펭귄 데이터 불러오기</a></li>
+  <li><a href="#데이터-결측치-확인" id="toc-데이터-결측치-확인" class="nav-link" data-scroll-target="#데이터-결측치-확인"><span class="header-section-number">2</span> 데이터 결측치 확인</a></li>
+  <li><a href="#펭귄의-종류-확인" id="toc-펭귄의-종류-확인" class="nav-link" data-scroll-target="#펭귄의-종류-확인"><span class="header-section-number">3</span> 펭귄의 종류 확인</a></li>
+  <li><a href="#빈도수-데이터-확인" id="toc-빈도수-데이터-확인" class="nav-link" data-scroll-target="#빈도수-데이터-확인"><span class="header-section-number">4</span> 빈도수 데이터 확인</a></li>
+  <li><a href="#각-종별-평균-수치-구하기" id="toc-각-종별-평균-수치-구하기" class="nav-link" data-scroll-target="#각-종별-평균-수치-구하기"><span class="header-section-number">5</span> 각 종별 평균 수치 구하기</a></li>
   </ul>
 </nav>
 </div>
@@ -109,14 +112,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><br></p>
-<p><strong>2조: 김규진, 김민채, 김보경</strong></p>
-<p><br> <br></p>
+<p class="text-secondary">
+<strong>2조: 김규진, 김민채, 김보경</strong>
+</p><p>
+</p><p><br> <br></p>
 <center>
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-s9aOENQqhR1UkpRSo_eFCnsE6tfTVT8lYQ&amp;s.png" class="img-fluid">
 </center>
 <p><br> <br></p>
-<section id="펭귄-데이터-불러오기" class="level3">
-<h3 class="anchored" data-anchor-id="펭귄-데이터-불러오기">1. 펭귄 데이터 불러오기</h3>
+<section id="펭귄-데이터-불러오기" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="펭귄-데이터-불러오기"><span class="header-section-number">1</span> 펭귄 데이터 불러오기</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -172,16 +177,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>데이터 타입은 문자열과 숫자형으로 나눠지는군요.</p>
 <p>저희는 문자열은 빈도수로 데이터 패턴을 파악하고, 숫자형은 산술통계를 활용해볼게요!</p>
 <p><img src="https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png" class="img-fluid"></p>
-<div id="009c779c" class="cell" data-execution_count="1">
+<div id="18ec8140" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> palmerpenguins <span class="im">import</span> load_penguins</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> load_penguins()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br> <br></p>
 </section>
-<section id="데이터-결측치-확인" class="level3">
-<h3 class="anchored" data-anchor-id="데이터-결측치-확인">2. 데이터 결측치 확인</h3>
+<section id="데이터-결측치-확인" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="데이터-결측치-확인"><span class="header-section-number">2</span> 데이터 결측치 확인</h2>
 <p>주로 성별데이터에서 결측치가 존재한다.</p>
-<div id="e3edaaf7" class="cell" data-execution_count="2">
+<div id="f08ea338" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>nan_check <span class="op">=</span> penguins.isna().<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>err <span class="op">=</span> penguins.loc[(penguins[<span class="st">'sex'</span>].isna()), :]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(err)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -217,23 +222,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>부리 길이 변수의 결측치 개수는 2 입니다.</p>
 <p><br> <br></p>
 </section>
-<section id="펭귄의-종류-확인" class="level3">
-<h3 class="anchored" data-anchor-id="펭귄의-종류-확인">3. 펭귄의 종류 확인</h3>
+<section id="펭귄의-종류-확인" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="펭귄의-종류-확인"><span class="header-section-number">3</span> 펭귄의 종류 확인</h2>
 <p><img src="https://forum.posit.co/uploads/default/original/3X/0/b/0ba5d8b2b0621630afc7a53dcff5975ec693d05b.png" class="img-fluid"></p>
 <p>오늘 데이터는 “펭귄의 종류”에 따라 알아볼 거예요.</p>
 <p>Palmer Penguin 데이터에는 Adelie, Gentoo, Chinstrap, 총 3개의 종류가 확인되네요.</p>
 <p>이는 오늘 데이터를 보는 데 있어 대분류 구분자로 활용될 것입니다.</p>
 <p><br></p>
-<div id="06209e0a" class="cell" data-execution_count="3">
+<div id="e4eb6d3b" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>penguins.loc[:, <span class="st">'species'</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>array(['Adelie', 'Gentoo', 'Chinstrap'], dtype=object)</code></pre>
 </div>
 </div>
 <p><br> <br></p>
 </section>
-<section id="빈도수-데이터-확인" class="level3">
-<h3 class="anchored" data-anchor-id="빈도수-데이터-확인">4. 빈도수 데이터 확인</h3>
+<section id="빈도수-데이터-확인" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="빈도수-데이터-확인"><span class="header-section-number">4</span> 빈도수 데이터 확인</h2>
 <ol type="1">
 <li>서식지</li>
 </ol>
@@ -275,7 +280,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Chinstrap</strong> 펭귄이 다른 펭귄들에 비해 표본 데이터 개수가 적다.</li>
 <li>대체적으로 성별 데이터는 남여 비율이 일정하지만, 일부 결측치가 존재한다.</li>
 </ul>
-<div id="a649c9d4" class="cell" data-execution_count="4">
+<div id="b1763a25" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>not_num <span class="op">=</span> penguins.select_dtypes(include<span class="op">=</span>[<span class="st">'object'</span>]).columns</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>group_by_species <span class="op">=</span> penguins.groupby(<span class="st">'species'</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>cnt <span class="op">=</span> {col: group_by_species[col].value_counts() <span class="cf">for</span> col <span class="kw">in</span> not_num}</span>
@@ -303,8 +308,8 @@ Name: count, dtype: int64}</code></pre>
 </div>
 <p><br> <br></p>
 </section>
-<section id="각-종별-평균-수치-구하기" class="level3">
-<h3 class="anchored" data-anchor-id="각-종별-평균-수치-구하기">5. 각 종별 평균 수치 구하기</h3>
+<section id="각-종별-평균-수치-구하기" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="각-종별-평균-수치-구하기"><span class="header-section-number">5</span> 각 종별 평균 수치 구하기</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -343,27 +348,81 @@ Name: count, dtype: int64}</code></pre>
 <li>수컷 펭귄이 암컷 펭귄보다 부리 길이, 부리 깊이, 날개 길이, 몸무게가 큰 경향이 있다.</li>
 </ul>
 <p><br></p>
-<div id="5c4aa94f" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>species_means <span class="op">=</span> penguins.groupby([<span class="st">'species'</span>, <span class="st">'sex'</span>]).mean(numeric_only<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(species_means)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                  bill_length_mm  bill_depth_mm  flipper_length_mm  \
-species   sex                                                        
-Adelie    female       37.257534      17.621918         187.794521   
-          male         40.390411      19.072603         192.410959   
-Chinstrap female       46.573529      17.588235         191.735294   
-          male         51.094118      19.252941         199.911765   
-Gentoo    female       45.563793      14.237931         212.706897   
-          male         49.473770      15.718033         221.540984   
+<p><code>#| echo: false</code> 를 하면 코드는 문서에 들어가지 않고 결과만 나온다. <code>#| code-fold: true</code> 를 하면 코드가 접혀있다.</p>
+<div id="b2b9d8b6" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="15">
+<div>
 
-                  body_mass_g         year  
-species   sex                               
-Adelie    female  3368.835616  2008.054795  
-          male    4043.493151  2008.054795  
-Chinstrap female  3527.205882  2007.970588  
-          male    3938.970588  2007.970588  
-Gentoo    female  4679.741379  2008.068966  
-          male    5484.836066  2008.065574  </code></pre>
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">부리 길이</th>
+<th data-quarto-table-cell-role="th">부리 깊이</th>
+<th data-quarto-table-cell-role="th">날개 길이</th>
+<th data-quarto-table-cell-role="th">몸무게</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">종</th>
+<th data-quarto-table-cell-role="th">성별</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td rowspan="2" data-quarto-table-cell-role="th" data-valign="top">Adelie</td>
+<td data-quarto-table-cell-role="th">female</td>
+<td>37.26</td>
+<td>17.62</td>
+<td>187.79</td>
+<td>3368.84</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">male</td>
+<td>40.39</td>
+<td>19.07</td>
+<td>192.41</td>
+<td>4043.49</td>
+</tr>
+<tr class="odd">
+<td rowspan="2" data-quarto-table-cell-role="th" data-valign="top">Chinstrap</td>
+<td data-quarto-table-cell-role="th">female</td>
+<td>46.57</td>
+<td>17.59</td>
+<td>191.74</td>
+<td>3527.21</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">male</td>
+<td>51.09</td>
+<td>19.25</td>
+<td>199.91</td>
+<td>3938.97</td>
+</tr>
+<tr class="odd">
+<td rowspan="2" data-quarto-table-cell-role="th" data-valign="top">Gentoo</td>
+<td data-quarto-table-cell-role="th">female</td>
+<td>45.56</td>
+<td>14.24</td>
+<td>212.71</td>
+<td>4679.74</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">male</td>
+<td>49.47</td>
+<td>15.72</td>
+<td>221.54</td>
+<td>5484.84</td>
+</tr>
+</tbody>
+</table>
+
+</div>
 </div>
 </div>
 <p><br> <br></p>
