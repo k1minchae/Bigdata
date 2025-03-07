@@ -18,7 +18,7 @@
 
 [Pandas 기초 학습](lecture/pandas-intro.py)
 
-[Pandas 강의 2](lecture/pandas-second.py)
+[Pandas 심화 실습](lecture/pandas-advance.py)
 
 ### 4. Quarto
 

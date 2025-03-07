@@ -180,4 +180,81 @@ min_body_mass = species_means['body_mass_g'].idxmin()
 # 날개 길이
 max_flipper_length = species_means['flipper_length_mm'].idxmax()
 min_flipper_length = species_means['flipper_length_mm'].idxmin()
-잠시만 왜
+
+
+'''
+복습
+
+'''
+pd.Series(penguins["bill_length_mm"].fillna(0), dtype="int64")  # data 타입을 int 로변경 이때 nan 값있으면안됨
+penguins.head(20)   # 기본값: 5
+penguins.sort_values(by=["bill_length_mm", "body_mass_g"], ascending=False) # 기본값: 오름차순
+round(penguins, 0).loc[:, ["bill_length_mm", "body_mass_g"]].sort_values(by=["bill_length_mm", "body_mass_g"], ascending=[False, True])
+penguins["bill_length_mm"] = round(penguins["bill_length_mm"])
+
+max_idx = penguins["bill_length_mm"].idxmax()
+max_v = penguins["bill_length_mm"].max()
+penguins.iloc[[max_idx],]   # DF (콜론 안써도 돌아간다?)
+# penguins.loc[, 1]   # 오류
+penguins.iloc[max_idx,]   # Series
+
+
+# 최대 부리 길이 (60mm)인 펭귄은 몇마리?
+len(penguins.loc[penguins["bill_length_mm"] == max_v, :])
+
+
+# species 열을 기준으로 그룹화하여 평균 계산
+penguins.groupby(['species', 'sex']).mean(numeric_only=True)
+
+# 섬별로 쪼개서 부리 길이의 평균 구하기
+penguins.groupby('island')['bill_length_mm'].mean()
+
+list(penguins.groupby('species'))
+
+penguins.groupby('island')['bill_length_mm'].sum().idxmax() # Series
+# Biscoe : 인덱스가 문자열
+
+
+# as_index = False 옵션 활용
+# 기본 인덱스 추가 => 기존 index는 따로 빼서 Column 으로 만들어줌
+# 기존 인덱스가 하나의 열이 되기 때문이 sort_values 활용 가능
+penguins.groupby('island', as_index=False)['bill_length_mm'].sum().idxmax() # DF
+penguins.groupby('island')['bill_length_mm'].sum().idxmax() # Series
+
+# 그룹을 두개 변수로 활용하고 싶을 땐?
+penguins.groupby(['species', 'island']).mean(numeric_only=True)
+
+
+# merge()
+df1 = pd.DataFrame({'key': ['A', 'B', 'C'], 'value': [1, 2, 3]})
+df2 = pd.DataFrame({'key': ['A', 'B', 'D'], 'value': [4, 5, 6]})
+pd.merge(df1, df2, on='key', how='inner')   # key열 기준으로 병합, inner join
+pd.merge(df1, df2, on='key', how='outer')   # left, right 도 있음
+pd.concat([df1, df2])   # concat 과의 차이점 (중복 없애지 않음 그냥 이어붙이기만함)
+pd.concat([df1, df2], join='inner') # 공통된 column 만 추출
+
+
+
+# 실습
+mid = pd.DataFrame({'id': [23, 10, 5, 1], 'midterm': [40, 30, 50, 20]})
+final = pd.DataFrame({'id': [23, 10, 5, 30], 'final': [45, 25, 50, 47]})
+pd.merge(mid, final, on='id', how='outer')
+
+
+# 실습 2
+# 1) 성별, 섬별 부리 길이 평균 계산
+df1 = penguins.groupby(['sex', 'island'])['bill_length_mm'].mean()  # 시리즈
+# 2) 성별, 섬별 부리 깊이 평균 계산
+df2 = penguins.groupby(['sex', 'island'])['bill_depth_mm'].mean()   # 시리즈
+# 3) 앞에 두개의 데이터프레임을 병합해서 성별, 섬별, 부리깊이, 깊이 DF 만들기
+pd.merge(df1, df2, on=['sex', 'island'], how='outer')
+pd.merge(df1, df2, on=['sex', 'island'], how='outer').reset_index()
+
+
+# 실습 3
+penguins.loc[:, "bill_depth_mm"].mean()
+
+# 이렇게하면 여러줄 코딩 가능
+(penguins
+    .loc[:, "bill_length_mm"]
+    .mean())
