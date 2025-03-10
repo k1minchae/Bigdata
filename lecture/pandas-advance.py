@@ -258,3 +258,187 @@ penguins.loc[:, "bill_depth_mm"].mean()
 (penguins
     .loc[:, "bill_length_mm"]
     .mean())
+
+
+'''
+데이터 재구조화: 전처리 과정에서 중요
+긴 코드를 효율적으로 줄일 수 있다.
+★ 데이터를 깔끔하게 관리해야 함
+- 행 하나가 관찰값 1개
+'''
+
+# melt()
+data = {
+    'Date': ['2024-07-01', '2024-07-02', '2024-07-03', '2024-07-03'],
+    'Temperature': [10, 20, 25, 20],
+    'Humidity': [60, 65, 70, 21]
+}
+df = pd.DataFrame(data)
+print(df)
+##   Date Temperature Humidity
+## 0 2024-07-01 10 60
+## 1 2024-07-02 20 65
+## 2 2024-07-03 25 70
+## 3 2024-07-03 20 21
+
+
+
+# data를 wide -> long
+df_melted = pd.melt(df,
+    id_vars=['Date'],
+    value_vars=['Temperature', 'Humidity'],
+    var_name='Variable',    # 온도 습도가 Variable 컬럼으로 내려옴
+    value_name='Value')
+df_melted
+##    Date Variable Value
+## 0 2024-07-01 Temperature 10
+## 1 2024-07-02 Temperature 20
+## 2 2024-07-03 Temperature 25
+## 3 2024-07-03 Temperature 20
+## 4 2024-07-01 Humidity 60
+## 5 2024-07-02 Humidity 65
+
+wide_data = pd.DataFrame({
+    'country': ['Afghanistan', 'Brazil', 'China'],
+    "2024년": [745, 37737, 212258],
+    "2025년": [2666, 80488, 213766]
+})
+wide_data
+
+df_long = pd.melt(wide_data,
+    id_vars=['country'],
+    value_vars=["2024년", "2025년"],
+    var_name = 'year',
+    value_name='cases'
+)
+df_long
+
+
+
+# pivot() : long -> wide
+data = {
+    'Date': ['2024-07-01', '2024-07-02', '2024-07-03'],
+    'Temperature': [10, 20, 25],
+    'Humidity': [60, 65, 70]
+}
+df = pd.DataFrame(data)
+# long 하게 변환
+df_melted = pd.melt(df,
+                    id_vars=['Date'],
+                    value_vars=['Temperature', 'Humidity'],
+                    var_name='Variable',
+                    value_name='Value')
+df_melted
+
+# pivot 함수를 사용해서 다시 wide 하게 원상복귀
+df_pivoted = df_melted.pivot(index='Date',
+                             columns='Variable',
+                             values='Value').reset_index()
+df_pivoted
+
+
+
+wide_data = pd.DataFrame({
+    'country': ['Afghanistan', 'Brazil', 'China'],
+    "2024": [745, 37737, 212258],
+    "2025": [2666, 80488, 213766]
+})
+wide_data
+
+df_long = pd.melt(wide_data,
+    id_vars=['country'],
+    value_vars=["2024", "2025"],
+    var_name = 'year',
+    value_name='cases'
+)
+df_long
+
+# pivot(): wide 하게 변형할 열과 해당 value 값에 들어갈 열을 고르기
+wide_2 = df_long.pivot(index='country',
+              columns='year',
+              values='cases').reset_index()
+wide_2.columns.name = None
+wide_2.shape    # (3, 3) year, country 가 들어있는 index 부분은 shape 에들어가지않음
+
+
+# pivot_table()
+data = {
+    'Date': ['2024-07-01', '2024-07-02', '2024-07-03', '2024-07-03'],
+    'Temperature': [10, 20, 25, 20],
+    'Humidity': [60, 65, 70, 21]
+}
+df = pd.DataFrame(data)
+df
+df_melted2 = pd.melt(df,
+        id_vars=['Date'],
+        value_vars=['Temperature', 'Humidity'],
+        var_name='Weather Factor',
+        value_name='TorH')
+
+# 이렇게 하면 에러 발생
+# Index contains duplicate entries : 중복된 index가 있어서 오류
+df_melted2.pivot(index='Date',
+                 columns='Weather Factor',
+                 values='TorH').reset_index()
+
+# pivot_table() 활용
+# aggfunc 옵션을 활용하여 중복이 있는 날짜의 값을 평균으로 대치
+# aggfunc 집계 함수 (기본: mean, sum, count)
+df_pivot_table = df_melted2.pivot_table(index='Date',
+                                        columns='Weather Factor',
+                                        values='TorH').reset_index()
+df_pivot_table.columns.name = None
+df_pivot_table
+
+
+# 예제
+df = pd.DataFrame({
+    'school': ['A', 'A', 'B', 'B', 'C', 'C'],
+    'gender': ['M', 'F', 'M', 'F', 'M', 'F'],
+    'city': ['North', 'South', 'North', 'South','North', 'South'],
+    'midterm': [10, 20, 30, 40, 50, 60],
+    'final': [5, 15, 25, 35, 45, 55]
+})
+df
+
+'''
+깔끔한 데이터의 조건
+1. 각 칼럼이 하나의 변수를 의미
+2. 각 행이 하나의 관측치를 나타낸다.
+'''
+df.pivot_table(index='school',
+               columns='')
+
+# 학교별 중간고사 평균 => Group by 와 같은 효과
+df.pivot_table(index='school',
+                columns='city',
+                values=['midterm', 'final'],
+                aggfunc='mean'
+                ).reset_index()
+
+
+# 인덱스가 여러개
+df.pivot_table(index=['school', 'gender'],
+            #    columns='city',
+               values=['midterm', 'final'],
+               aggfunc='mean').reset_index()
+# 결과값은 무조건 index 중복 X
+
+df.pivot_table(index='school',
+            #    columns='city',
+               values='midterm',
+               aggfunc='sum').reset_index()
+
+df.pivot_table(index='school',
+            #    columns='city',
+               values='midterm',
+               aggfunc='last').reset_index()    # 마지막 꺼 가져오는 집계함수
+
+# 벡터 원소들을 더한 수 제곱을 하는 함수 my_f
+def my_f(arr):
+    return np.sum(arr) ** 2
+
+df.pivot_table(index='school',
+            #    columns='city',
+                values='midterm',
+                aggfunc=my_f).reset_index()
