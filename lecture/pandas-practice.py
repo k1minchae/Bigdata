@@ -55,6 +55,7 @@ pv = penguins.pivot_table(index="island",
                      fill_value="개체수 없음")
 pv.columns.name = None
 pv
+# Nan 값을 "개체수 없음" 이라고 채운다.
 
 
 '''
@@ -85,3 +86,25 @@ def max_diff_min(arr):
 penguins.pivot_table(index="species",
                      values="body_mass_g",
                      aggfunc=max_diff_min).reset_index()
+
+
+'''
+펭귄 데이터에서 bill로 시작하는 칼럼들을 
+선택한 후 표준화(standardize)를 진행
+결과를 엑셀 파일로 저장해주세요. 
+
+표준화는 평균 대신 중앙값 사용
+표준화 표준편차 대신 IQR (상위 25% - 하위 25%) 사용
+
+시트 이름: penguin-std
+파일 이름: penguin.xlsx
+'''
+
+def standardize(arr):
+    bottom = arr.quantile(0.25)
+    top = arr.quantile(0.75)
+    return (arr - np.nanmedian(arr)) / (top - bottom)
+
+bill = penguins.loc[:, penguins.columns.str.startswith('bill')]
+std_bill = bill.apply(standardize)
+std_bill.to_excel("../practice-data/penguin.xlsx", index=True, sheet_name="penguin-std")

@@ -234,7 +234,6 @@ pd.concat([df1, df2])   # concat 과의 차이점 (중복 없애지 않음 그�
 pd.concat([df1, df2], join='inner') # 공통된 column 만 추출
 
 
-
 # 실습
 mid = pd.DataFrame({'id': [23, 10, 5, 1], 'midterm': [40, 30, 50, 20]})
 final = pd.DataFrame({'id': [23, 10, 5, 30], 'final': [45, 25, 50, 47]})
@@ -442,3 +441,92 @@ df.pivot_table(index='school',
             #    columns='city',
                 values='midterm',
                 aggfunc=my_f).reset_index()
+
+
+# f로 시작하는 칼럼 찾기
+df.columns.str.startswith('f')  # 결과값: boolean np array
+
+# c로 끝나는 칼럼 찾기
+df.columns.str.endswith('c') 
+
+# f를 포함하는 칼럼 찾기 
+df.columns.str.contains('f') 
+
+
+new_data = pd.DataFrame({
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 35],
+    'Score': [90, 85, 88]
+})
+
+# 데이터를 csv 파일로 저장하는법
+new_data.to_csv("../practice-data/my-data.csv", index=False, encoding="utf-8")
+
+# Excel 파일로 저장하는 방법
+new_data.to_excel("../practice-data/my-ex-data.xlsx", sheet_name="sheet1")
+
+# Parquet 파일로 저장하기 (대용량 데이터 저장 포맷)
+new_data.to_parquet("../practice-data/my-pq-data.parquet", engine="pyarrow")
+
+# JSON 파일로 저장하기
+new_data.to_json("../practice-data/my-data.json", orient="records", indent=4)
+
+
+
+'''
+날짜와 시간 다루기
+
+'''
+import warnings
+warnings.filterwarnings("ignore", category=pd.errors.SettingWithCopyWarning)
+
+data = {
+    'date': ['2024-01-01 12:34:56', '2024-02-01 23:45:01', '2024-03-01 06:07:08'],
+    'value': [100, 201, 302]
+}
+
+date_data = pd.DataFrame(data)
+date_data['date'] = pd.to_datetime(date_data['date'])
+date_data.dtypes
+
+pd.to_datetime('02-2024-01', format='%m-%Y-%d')
+pd.to_datetime('2025년 3월 11일', format='%Y년 %m월 %d일')
+date_data['wday'] = date_data['date'].dt.day_name() # 요일 추출
+date_data['wday'] = date_data['date'].dt.weekday # 월요일: 0
+date_data['date'].dt.hour   # 시간 정보
+date_data['date'].dt.second # 초 정보
+
+date_data['yr'] = date_data['date'].dt.year
+date_data['mn'] = date_data['date'].dt.month
+date_data['day'] = date_data['date'].dt.day
+date_data = date_data.rename(columns={'yr': 'year', 'mn': 'month'})
+
+# 일정한 간격의 날짜 범위 생성
+date_range = pd.date_range(start='2021-01-01', end='2022-01-10', freq='MS') # Month Start
+date_range = pd.date_range(start='2021-01-01', end='2022-01-10', freq='D')  # Day
+date_range = pd.date_range(start='2021-01-01', end='2022-01-10', freq='YE') # Year End
+date_range
+
+
+'''
+문자열 다루기
+
+'''
+data = {
+    '가전제품': ['냉장고', '세탁기', '전자레인지', '에어컨', '청소기'],
+    '브랜드': ['LG', 'Samsung', 'Panasonic', 'Daikin', 'Dyson']
+}
+df = pd.DataFrame(data)
+df['가전제품'].str.len()
+df['브랜드'] = df['브랜드'].str.lower() # dyson
+df['브랜드'] = df['브랜드'].str.upper() # DYSON
+df['브랜드'] = df['브랜드'].str.title() # Dyson
+'LG LG'.title()
+
+
+df.columns.str.contains('l')    # np.array
+df['브랜드'].str.contains('l')   # 시리즈
+
+df['브랜드'].str.replace('a', 'aaaa')   # a를 'aaaa'로 대체
+df['브랜드'].str.split('a', )   # a가 빠지고 그거기준으로 리스트형식으로 나뉨
+
