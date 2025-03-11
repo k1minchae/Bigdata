@@ -37,6 +37,10 @@
 
    ```
 
-2. 실습 데이터를 이용한 실습
+2. 학생 데이터를 이용한 실습
 
-[실습 내용](lecture/data-practice.py)
+[실습 내용](lecture/student-data-practice.py)
+
+3. 항공편 데이터를 이용한 데이터 분석 실습
+
+[실습 내용](lecture/flight-data-practice.py)
