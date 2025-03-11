@@ -20,6 +20,8 @@
 
 [Pandas 심화 실습](lecture/pandas-advance.py)
 
+[Pandas 연습 문제 풀이](lecture/pandas-practice.py)
+
 ### 4. Quarto
 
 [Quarto 기초 학습](quarto/hello.qmd)
@@ -34,3 +36,7 @@
    inspect.getsource(my_f)
 
    ```
+
+2. 실습 데이터를 이용한 실습
+
+[실습 내용](lecture/data-practice.py)
