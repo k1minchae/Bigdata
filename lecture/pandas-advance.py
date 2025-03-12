@@ -507,26 +507,3 @@ date_range = pd.date_range(start='2021-01-01', end='2022-01-10', freq='D')  # Da
 date_range = pd.date_range(start='2021-01-01', end='2022-01-10', freq='YE') # Year End
 date_range
 
-
-'''
-문자열 다루기
-
-'''
-data = {
-    '가전제품': ['냉장고', '세탁기', '전자레인지', '에어컨', '청소기'],
-    '브랜드': ['LG', 'Samsung', 'Panasonic', 'Daikin', 'Dyson']
-}
-df = pd.DataFrame(data)
-df['가전제품'].str.len()
-df['브랜드'] = df['브랜드'].str.lower() # dyson
-df['브랜드'] = df['브랜드'].str.upper() # DYSON
-df['브랜드'] = df['브랜드'].str.title() # Dyson
-'LG LG'.title()
-
-
-df.columns.str.contains('l')    # np.array
-df['브랜드'].str.contains('l')   # 시리즈
-
-df['브랜드'].str.replace('a', 'aaaa')   # a를 'aaaa'로 대체
-df['브랜드'].str.split('a', )   # a가 빠지고 그거기준으로 리스트형식으로 나뉨
-
