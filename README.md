@@ -22,11 +22,21 @@
 
 [Pandas 연습 문제 풀이](lecture/pandas-practice.py)
 
-### 4. Quarto
+### 4. 실습
+
+[학생 데이터 전처리](lecture/student-data-practice.py)
+
+[항공편 데이터 분석](lecture/flight-data-practice.py)
+
+[자전거 공유 데이터 전처리](lecture/bike-data-practice.py)
+
+[앱 로그 데이터 전처리](lecture/log-data-practice.py)
+
+### 5. Quarto
 
 [Quarto 기초 학습](quarto/hello.qmd)
 
-### 4. 기타
+### 6. 기타
 
 1. 소스코드 열어보는 모듈
 
@@ -36,11 +46,3 @@
    inspect.getsource(my_f)
 
    ```
-
-2. 학생 데이터를 이용한 실습
-
-[실습 내용](lecture/student-data-practice.py)
-
-3. 항공편 데이터를 이용한 데이터 분석 실습
-
-[실습 내용](lecture/flight-data-practice.py)
