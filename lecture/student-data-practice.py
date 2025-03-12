@@ -123,7 +123,7 @@ df.iloc[min_idx, :]
 
 # midterm final assignment 점수의 평균을 계산하여 
 # average 열을 추가하고 첫5행을 출력하세요
-df.loc[:, 'average'] = np.nanmean(df.loc[:, ['midterm', 'final', 'assignment']], axis=1)
+df['average'] = np.nanmean(df.loc[:, ['midterm', 'final', 'assignment']], axis=1)
 df.head()
 
 # 아래의 추가 데이터를 생성하고 기존 데이터 프레임과 
