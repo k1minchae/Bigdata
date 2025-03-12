@@ -26,13 +26,13 @@
 
 ### 4. 실습
 
-[학생 데이터 전처리](lecture/student-data-practice.py)
+[학생 데이터 전처리](practice/student-data-practice.py)
 
-[항공편 데이터 분석](lecture/flight-data-practice.py)
+[항공편 데이터 분석](practice/flight-data-practice.py)
 
-[자전거 공유 데이터 전처리](lecture/bike-data-practice.py)
+[자전거 공유 데이터 전처리](practice/bike-data-practice.py)
 
-[앱 로그 데이터 전처리](lecture/log-data-practice.py)
+[앱 로그 데이터 전처리](practice/log-data-practice.py)
 
 ### 5. Quarto
 
