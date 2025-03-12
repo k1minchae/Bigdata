@@ -22,6 +22,8 @@
 
 [Pandas 연습 문제 풀이](lecture/pandas-practice.py)
 
+[Pandas String Data](lecture/pandas-string.py)
+
 ### 4. 실습
 
 [학생 데이터 전처리](lecture/student-data-practice.py)
