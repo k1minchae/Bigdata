@@ -19,12 +19,12 @@ log.str.extract(r'(\b\d+:\d+:\d+)')
 log.str.extract(r'([가-힣]+)')
 
 # 로그 칼럼에서 특수 문자를 제거하시오
-log.str.replace(r'[^a-zA-Z0-9]+', ' ', regex=True)
+log.str.replace(r'[^a-zA-Z0-9\s]+', '', regex=True)
 
 # 로그 칼럼에서 유저Amount 값을 추출한 후 각 유저별Amount의 평균값을 계산하시오
-log.str.extract(r'([가-힣]{3})')
-df['Amount'] = log.str.extract(r'Amount: (\d+)').dropna()
-df['User'] = log.str.extract(r'([가-힣]{3})')
+log.str.extract(r'([가-힣]+)')
+df['Amount'] = log.str.extract(r'Amount:\s*(\d+)').dropna()
+df['User'] = log.str.extract(r'([가-힣]+)')
 
 # 평균 계산을 위해 변환
 df = df.astype({'Amount': 'float64'})
