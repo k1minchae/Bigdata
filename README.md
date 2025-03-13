@@ -24,7 +24,11 @@
 
 [Pandas String Data](lecture/pandas-string.py)
 
-### 4. 실습
+### 4. Matplotlib
+
+[Matplotlib 기초 학습](lecture/matplotlib-intro.py)
+
+### 5. 실습
 
 [학생 데이터 전처리](practice/student-data-practice.py)
 
@@ -34,11 +38,11 @@
 
 [앱 로그 데이터 전처리](practice/log-data-practice.py)
 
-### 5. Quarto
+### 6. Quarto
 
 [Quarto 기초 학습](quarto/hello.qmd)
 
-### 6. 기타
+### 7. 기타
 
 1. 소스코드 열어보는 모듈
 
