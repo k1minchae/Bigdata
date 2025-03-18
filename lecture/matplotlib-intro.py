@@ -231,157 +231,179 @@ plt.ylim(250, 350)      # y축 limit 설정
 plt.title("obesity level")
 
 
+# box plot
+# 데이터의 분포를 약속된 그림을 통해 나타내주는 것
+# 사분위(데이터의 분포를 4등분), 이상치는 점으로 표시
 
-# flight 데이터 실습
-from nycflights13 import flights, planes
-flights.info()
-planes.info()
-flights.head()
-planes.head()
+# 숫자를 오름차순 정렬 + 중앙값 찾기
 
-flights['carrier'].unique()
-
-# merge 사용해서 flights 와 planes 병합한 데이터로
-# 각 데이터 변수 최소 하나씩 선택 후 분석
-# 날짜 시간 전처리 코드 들어갈 것
-# 문자열 전처리 코드 들어갈 것
-# 시각화 종류 최소 3개 (배우지 않은것도 OK)
-
-planes['type'].unique() # 'Fixed wing multi engine', 'Fixed wing single engine','Rotorcraft'
-planes['engine'].unique()
-planes['manufacturer'].unique()
-planes['model'].unique()   # 127
-planes['speed'].isna().sum() # 거의다 Nan값
-
-data = pd.merge(flights, planes, on='tailnum', how='left')
-data.head()
-
-
-# 각 비행기 model별로 생산 년도 시각화 year
-one_engine = data.loc[data['engines'] == 1, 'year_y']
-two_engine = data.loc[data['engines'] == 2, 'year_y']
-three_engine = data.loc[data['engines'] == 3, 'year_y']
-four_engine = data.loc[data['engines'] == 4, 'year_y']
-
-
-# 생산년도에따라 선호하는 엔진의 개수가 달라지는 것을 알 수 있다.
-plt.figure(figsize=(12, 5))
-sns.kdeplot(one_engine, bw_method=0.4, shade=True)
-sns.kdeplot(two_engine, bw_method=0.4, shade=True)
-sns.kdeplot(three_engine, bw_method=0.4, shade=True)
-sns.kdeplot(four_engine, bw_method=0.4, shade=True)
-plt.xlabel("Production year")
-plt.legend(["1 engine", "2 engines", "3 engines", "4 engines"])
-plt.title("Production year by Engine cnt")
-
-
-# seats 수에 따른 지연시간
-
-
-
-
-# 항공사별 좌석 수 (대중적인 항공사가 뭔지?)
-seats_by_carrier = data.groupby('carrier')['seats'].sum().reset_index()
-
-# 항공사 코드로 이름 매칭
-airline_names = {
-    "9E": "Endeavor Air",
-    "AA": "American Airlines",
-    "AS": "Alaska Airlines",
-    "B6": "JetBlue Airways",
-    "DL": "Delta Air Lines",
-    "EV": "ExpressJet Airlines",
-    "F9": "Frontier Airlines",
-    "FL": "AirTran Airways",
-    "HA": "Hawaiian Airlines",
-    "MQ": "Envoy Air",
-    "OO": "SkyWest Airlines",
-    "UA": "United Airlines",
-    "US": "US Airways",
-    "VX": "Virgin America",
-    "WN": "Southwest Airlines",
-    "YV": "Mesa Airlines"
-}
-
-def replace_airline_code(row):
-    row[0] = airline_names.get(row[0], "Unknown")  # carrier 코드 -> 항공사 이름 변환
-    return row
-airline_seats_data = np.apply_along_axis(replace_airline_code, axis=1, arr=seats_by_carrier)
-
-plt.figure(figsize=(12, 5))
-plt.bar(airline_seats_data[:, 0], airline_seats_data[:, 1])
-plt.ylabel('seats')
-plt.xlabel('Airlines')
+# 상자그림(Box Plot) 그리기
+plt.figure(figsize=(6,5))
+sns.boxplot(x=df['NObeyesdad'], 
+            y=df['Weight'], 
+            palette="Pastel1")
+plt.xlabel("Obesity Level")
+plt.ylabel("Weight")
+plt.title("Box Plot of Weight by Obesity Level")
 plt.xticks(rotation=45)
-plt.title('Popular Airline Info')
-
-
-
-nycflights = flights
-
-# 시간대 별 항공편 수 분석
-# 시간대별로 지연 시간이 얼마나 달라지는지?
-def divide_hour(hour):
-    if 6 <= hour < 12:
-        return 'morning'
-    if 12 <= hour < 18:
-        return 'lunch'
-    if 18 <= hour < 24:
-        return 'dinner'
-    return 'dawn'
-
-nycflights['time_of_day'] = nycflights['hour'].apply(divide_hour)
-
-# 2-1) 공항별, 시간대 별로 항공편수가 몇개있는지
-time_flights = nycflights.groupby(['time_of_day']).size()
-plt.bar(['dawn', 'morning', 'lunch', 'dinner'], time_flights.values[[0, 3, 2, 1]])
-plt.xlabel('time')
-plt.ylabel('flights')
-plt.title('flights by time')
-
-
-# 15분 이상 지연된 비행기들
-delayed_flights = nycflights.loc[nycflights['dep_delay'] >= 15, :]
-
-# 지연된 비행기 시간대별로 분류
-delayed_flight_cnt = delayed_flights.groupby('time_of_day').size()
-plt.bar(['dawn', 'morning', 'lunch', 'dinner'], delayed_flight_cnt.values[[0, 3, 2, 1]])
-plt.xlabel('time')
-plt.ylabel('delayed flights')
-plt.title('delay by time')
+plt.show()
 
 '''
-- 항공편 수가 많은 아침에 가장 많은 지연을 예상했으나 
-  아침보다 점심이, 그리고 저녁이 확연히 지연비율이 높음.
-  
-- Q) 앞에 항공편이 지연되는 것이 뒷 항공편에 영향을 미쳐서 
-     항공편이 적음에도 저녁시간에 많은 지연이 발생되는것이 아닐까?
+이상치 판단기준
+1. IQR = Q3 - Q1 (상자의 길이)
+2. 데이터 중에서 Q1과 Q3에서 1.5 * IQR 이상 떨어진 데이터는 이상치로 판단
 '''
 
-# 연쇄지연 여부 분석
-# 출발 시간 기준으로 정렬
-sorted_flight = nycflights.sort_values(['year','month', 'day', 'dep_time'], ascending=True)
-sorted_flight = sorted_flight.fillna(0)
 
-# 같은 날, 이전 시간에 출발한 항공편의 도착 지연 정보 추가
-sorted_flight['prev_arr_delay'] = sorted_flight.groupby(['year', 'month', 'day'])['arr_delay'].shift(1)
-sorted_flight['prev_arr_delay']
-
-# 연쇄 지연 여부 분석 (이전 항공편의 도착 지연이 현재 항공편의 출발 지연에 영향을 주었는지)
-delay_cnt = len(sorted_flight.loc[sorted_flight['dep_delay'] >= 15, :]) # 72914
-next_delay_cnt = len(sorted_flight.loc[(sorted_flight['dep_delay'] >= 15) & (sorted_flight['prev_arr_delay'] >= 15), :]) # 30797
-
-labels = ["cascade delay O", "cascade delay X"]
-sizes = [next_delay_cnt, delay_cnt - next_delay_cnt]
-colors = ["#FF9999", "#66B2FF"]
-
-# 파이 차트 그리기
-plt.figure(figsize=(7, 7))
-plt.pie(sizes, labels=labels, autopct="%1.1f%%", startangle=90, colors=colors, wedgeprops={"edgecolor": "black"})
-plt.title("cascade delay")
+# pandas 를 활용한 상자그림 시각화
+df.boxplot(column='Weight', 
+           by='NObeyesdad', 
+           grid=False, 
+           figsize=(8, 5))  
+plt.xlabel("Obesity Level")
+plt.ylabel("Weight")
+plt.title("Box Plot of Weight by Obesity Level")
+plt.suptitle("")  # 자동 생성되는 그룹 제목 제거
+plt.xticks(rotation=45)
+plt.show()
 
 
-'''
-결론: 연쇄지연 발생으로인해 항공편이 적음에도 저녁시간대에 비행기 지연이 자주 발생된다.
-아침 시간대에는 연쇄 지연의 영향이 적어서 항공편이 많음에도 지연이 적게 발생한다.
-'''
+np.random.seed(25317)
+d = np.random.randint(1, 21, size=15)
+
+# [ 1,  3,  3,  5,  5,  6,  6,  8, 11, 13, 13, 15, 18, 18, 20]
+d.sort()
+Q2 = 8
+d[d < Q2] # [1, 3, 3, 5, 5, 6, 6]
+Q1 = 5
+d[d > Q2] # [11, 13, 13, 15, 18, 18, 20]
+Q3 = 15
+
+plt.boxplot(d)
+plt.xlabel("data")
+plt.ylabel("value")
+plt.title("Box Plot of Random Int")
+
+
+# 이상치가 있는 상자그림
+np.random.seed(957)
+y = np.random.randint(1, 21, size=15)
+y[3] = 40
+plt.boxplot(y)
+plt.xlabel("data")
+plt.ylabel("value")
+plt.title("Box Plot with outlier")
+
+
+# 비만 종류별 데이터 포인트 색깔을 변경해보세요.
+df
+plt.figure(figsize=(6, 5))
+NObeyesdad = df['NObeyesdad'].unique()
+colors = ["#FF9999", "#66B2FF", "#99FF99", "#FFCC99"]
+for i, ob in enumerate(NObeyesdad):
+    temp = df.loc[df['NObeyesdad'] == ob, :]
+    plt.scatter(temp['Height'], temp['Weight'], alpha=0.3, color=colors[i])
+plt.legend(NObeyesdad)
+plt.xlabel("Height")
+plt.ylabel("Weight")
+plt.title("Scatter Plot of Height and Weight by Obesity Level")
+plt.show()
+
+
+
+
+# np select 활용
+# 고유한 NObeyesdad 값 가져오기
+NObeyesdad = df['NObeyesdad'].unique()
+
+# 색상 리스트 (고유한 obesity level과 매칭)
+colors = ["#FF9999", "#66B2FF", "#99FF99", "#FFCC99"]
+
+# np.select()를 사용하여 각 NObeyesdad 값에 해당하는 색상 선택
+conditions = [df['NObeyesdad'] == ob for ob in NObeyesdad]
+# default는 검정색 (혹시 없는 값이 있을 경우 대비)
+df['color'] = np.select(conditions, colors, default="#000000")  
+
+# 산점도 그리기
+plt.scatter(df['Height'], df['Weight'], alpha=0.3, color=df['color'])
+handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=colors[i], label=ob) for i, ob in enumerate(NObeyesdad)]
+plt.legend(handles, NObeyesdad, title="Obesity Level")
+plt.xlabel("Height")
+plt.ylabel("Weight")
+plt.title("Scatter Plot of Height and Weight by Obesity Level")
+
+
+# sns 산점도
+import seaborn as sns
+# 이게훨씬편함!!!
+sns.scatterplot(x='Height', y='Weight', hue='NObeyesdad', data=df, alpha=0.7)
+sns.scatterplot(x='Weight', y='Age', data=df, alpha=0.7)
+plt.xlabel("Weight")
+plt.ylabel("Age")
+sns.scatterplot(x='Age', y='Weight', data=df, alpha=0.7)
+plt.xlabel("Age")
+plt.ylabel("Weight")
+
+
+
+# 산점도
+# 두 변수의 상관관계를 파악
+# 선형/비선형 관계 분석
+
+# 키와 몸무게의 관계 + 각 종별 분석
+penguin = pd.read_csv('../practice-data/penguins.csv')
+penguin['species'].unique() # ['Adelie', 'Chinstrap', 'Gentoo']
+adelie = penguin.loc[penguin['species'] == 'Adelie', :]
+chinstrap = penguin.loc[penguin['species'] == 'Chinstrap', :]
+gentoo = penguin.loc[penguin['species'] == 'Gentoo', :]
+plt.scatter(adelie['body_mass_g'], adelie['flipper_length_mm'], alpha=0.5)
+plt.scatter(gentoo['body_mass_g'], gentoo['flipper_length_mm'], alpha=0.5)
+plt.scatter(chinstrap['body_mass_g'], chinstrap['flipper_length_mm'], alpha=0.5)
+plt.xlabel("body mass")
+plt.ylabel("flipper length")
+plt.title("Scatter Plot of Body Mass and Flipper Length")
+plt.legend(['Adelie', 'Gentoo', 'Chinstrap'])
+
+
+# 히트맵 (Heatmap)
+# 데이터 행렬을 색상으로 표현한 그래프
+# 진할수록 큰 값
+# 상관관계 분석에 사용
+
+# 상관행렬 계산
+corr_matrix = df[['Age', 'Height', 'Weight']].corr()
+# 히트맵 그리기
+plt.figure(figsize=(6,5))
+sns.heatmap(corr_matrix, 
+            annot=True,    # 그래프 글씨
+            cmap="coolwarm", 
+            fmt=".2f", 
+            linewidths=0.5)
+plt.title("Heatmap of Feature Correlations")
+plt.show()
+
+
+# 시계열 라인 그래프
+# X축이 시간, Y축이 해당 시간의 값
+
+dates = pd.date_range(start='2023-01-01', periods=30, freq='D')
+values = np.cumsum(np.random.randn(30)) + 50
+df_timeseries = pd.DataFrame({"Date": dates, "Value": values})
+plt.figure(figsize=(8,5))
+plt.plot(df_timeseries['Date'], df_timeseries['Value'], marker='o', linestyle='-')
+plt.xlabel("Date")
+plt.ylabel("Value")
+plt.title("Time Series Line Graph")
+plt.xticks(rotation=45)
+plt.show()
+
+
+# 모자이크 그래프
+# 범주형 데이터의 빈도를 나타내는 그래프
+# 사각형의 크기가 데이터의 빈도를 나타냄
+from statsmodels.graphics.mosaicplot import mosaic
+
+# 모자이크 그래프 그리기
+plt.figure(figsize=(8,5))
+mosaic(df, ['Gender', 'NObeyesdad'], title="Mosaic Plot of Gender vs Obesity Level")
+plt.show()
