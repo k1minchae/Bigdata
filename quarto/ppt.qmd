@@ -3,7 +3,8 @@ title: "뉴욕 비행장 데이터 분석"
 author: "ㅇㅇ조"
 format: 
   revealjs:
-    incremental: true
+    logo: logo.png
+    theme: '
 jupyter: python3
 ---
 
@@ -34,7 +35,7 @@ planes.info()
 - 3번째
 :::
 
-
+::::: columns
 ::: {.column width="40%"}
 이부분은 40%를차지하고
 :::
@@ -42,3 +43,24 @@ planes.info()
 ::: {.column width="60%"}
 이부분은 60% 차지
 :::
+:::::
+
+
+## 내용 작게 만들기 {.smaller}
+
+## 스크롤 가능하게 만들기 {.scrollable}
+
+
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
+* 아이템들
