@@ -24,6 +24,8 @@
 
 [Pandas String Data](lecture/pandas-string.py)
 
+[Pandas 범주형 데이터](lecture/pandas-category.py)
+
 ### 4. Matplotlib
 
 [Matplotlib 기초 학습](lecture/matplotlib-intro.py)
