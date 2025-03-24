@@ -30,7 +30,15 @@
 
 [Matplotlib 기초 학습](lecture/matplotlib-intro.py)
 
-### 5. 실습
+### 5. 통계
+
+[Numpy를 활용한 통계 기초](statistics/statistics-numpy.py)
+
+[베이즈 정리 연습 문제](statistics/bayes-practice.py)
+
+[순열과 조합 연습 문제](statistics/per-comb-practice.py)
+
+### 6. 실습
 
 [학생 데이터 전처리](practice/student-data-practice.py)
 
@@ -40,11 +48,11 @@
 
 [앱 로그 데이터 전처리](practice/log-data-practice.py)
 
-### 6. Quarto
+### 7. Quarto
 
 [Quarto 기초 학습](quarto/hello.qmd)
 
-### 7. 기타
+### 8. 기타
 
 1. 소스코드 열어보는 모듈
 
