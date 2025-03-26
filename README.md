@@ -38,6 +38,10 @@
 
 [순열과 조합 연습 문제](statistics/per-comb-practice.py)
 
+[통계 기초 문제](statistics/statistics-practice.py)
+
+[통계 심화 문제](statistics/statistics-advance.py)
+
 ### 6. 실습
 
 [학생 데이터 전처리](practice/student-data-practice.py)
