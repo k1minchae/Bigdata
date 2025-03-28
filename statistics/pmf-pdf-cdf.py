@@ -89,6 +89,7 @@ from scipy.stats import binom
 # 이 확률 변수의 기대값은?
 n, p = 5, 0.3
 binom.expect(args=(5, 0.3))
+binom(5, 0.3).mean()
 
 # 이 확률 변수의 분산은?
 variance = binom.var(n, p)
@@ -111,6 +112,7 @@ binom.cdf(2, n=n, p=p)
 # Y ~ B(n=30, p=0.03)
 
 1 - binom.cdf(2, n=30, p=0.01)
+
 
 
 # 문제 2-2
@@ -231,30 +233,21 @@ poisson.cdf(mu=3.5, k=2)
 # 방문 횟수 데이터
 visits = np.array([0, 1, 2, 0, 3, 1, 4, 2, 2, 3, 1, 0, 1, 2, 3, 1, 2, 3, 4, 2])
 
-# 1️⃣ 포아송 분포의 모수(람다 λ) 추정
-lambda_hat = visits.mean()  # 평균을 사용하여 λ 추정
-
-# 2️⃣ 포아송 확률질량함수(PMF) 계산
-x_vals = np.arange(0, max(visits) + 1)  # 가능한 방문 횟수 값들
-poisson_pmf = poisson.pmf(x_vals, mu=lambda_hat)  # 포아송 분포 확률 계산
-
-# 3️⃣ 히스토그램과 PMF 비교 시각화
-plt.figure(figsize=(8, 5))
-
 # 관측값
 values, counts = np.unique(visits, return_counts=True)
 prob_obs = counts / len(visits)
 
+# 추정된 파라미터
+lambda_hat = np.mean(visits)
+x = np.arange(0, max(values)+1)
+pmf_theory = poisson.pmf(x, mu=lambda_hat)
 
-plt.bar(x_vals, prob_obs, alpha=0.6, color='r', label='Poisson PMF')
-plt.bar(x_vals, poisson_pmf, alpha=0.6, color='b', label='Poisson PMF')
-
-# 그래프 설정
-plt.xlabel('Number of Visits')
-plt.ylabel('Probability')
-plt.title('Comparison of Actual Data and Poisson PMF')
+# 시각화
+plt.bar(x -   0.2, prob_obs, width=0.4, label="Observed", color="skyblue")
+plt.bar(x + 0.2, pmf_theory, width=0.4, label="Poisson Fit", color="orange")
+plt.xlabel("Visits")
+plt.ylabel("Probability")
+plt.title("Observed vs. Fitted Poisson PMF")
 plt.legend()
-plt.grid()
-
-# 그래프 출력
+plt.grid(True)
 plt.show()
