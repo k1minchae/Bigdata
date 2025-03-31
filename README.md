@@ -42,6 +42,12 @@
 
 [통계 심화 문제](statistics/statistics-advance.py)
 
+[PMF, PDF, CDF](statistics/pmf-pdf-cdf.py)
+
+[여러 통계 분포](statistics/distribution.py)
+
+[통계 검정 학습](statistics/estimation.py)
+
 ### 6. 실습
 
 [학생 데이터 전처리](practice/student-data-practice.py)
