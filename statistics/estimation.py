@@ -729,6 +729,24 @@ pval < 0.05  # False
 # p-value가 0.05보다 작지 않으므로 귀무가설을 기각할 수 없다.
 # 즉, 평균 체온은 36.5도라고 주장할 수 있다.
 
+critical_val = t.ppf(0.975, df=n-1)  # 95% 신뢰구간의 임계값
+# 95% 신뢰구간 계산
+lower = x.mean() - critical_val * (x.std(ddof=1) / np.sqrt(n)) 
+upper = x.mean() + critical_val * (x.std(ddof=1) / np.sqrt(n))
+
+lower, upper
+
+# 시각화
+k = np.linspace(-4, 4, 1000)
+plt.plot(k, t.pdf(k, df=n-1), label='t-distribution', color='blue')
+plt.axvline(tstat, color='red', linestyle='--', label=f't-statistic = {tstat:.2f}')
+plt.fill_between(k, t.pdf(k, df=n-1), where=(k <= -critical_val) | (k >= critical_val), color='red', alpha=0.3, label='Rejection Region')
+plt.legend()
+plt.xlabel('t-value')
+plt.ylabel('Density')
+plt.grid()
+plt.title("body temperature t-test")
+plt.show()
 
 
 '''
