@@ -789,8 +789,7 @@ After: 72, 70, 75, 78, 67, 74, 71, 74, 72, 69
 '''
 before = np.array([75, 72, 78, 80, 69, 77, 73, 76, 74, 71])
 after = np.array([72, 70, 75, 78, 67, 74, 71, 74, 72, 69])
-help(ttest_rel)
 tstat, pval = ttest_rel(after, before, alternative="less")
-p_val < 0.05  # False
-# p-value가 0.05보다 작지 않으므로 귀무가설을 기각할 수 없다.
-# 즉, 평균 체중이 감소했다고 주장할 수 없다.
+pval < 0.05  # True
+# p-value가 0.05보다 작으므로 귀무가설 기각할 수 있다.
+# 즉, 평균 체중이 감소했다고 주장할 수 있다.
