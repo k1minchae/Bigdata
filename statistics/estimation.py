@@ -1,6 +1,7 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
-from scipy.stats import uniform, norm, t, binom
+from scipy.stats import uniform, norm, t, binom, chi2, f
 
 # U(3, 7)
 uniform.mean(loc=3, scale=4) # 5.0
@@ -339,3 +340,457 @@ z = (53 - 50) / (8 / np.sqrt(40))  # 검정통계량
 p_value = norm.sf(abs(z)) * 2
 p_value < 0.05 # True
 # p-value가 0.05보다 작으니깐 귀무가설을 기각할 수 있다.
+
+
+##############################################################################
+# 이틀차
+
+# X의 기대값 E[X^4 + X^2 - 3] 추정하기
+# sum(x^4 + x**2 - 3) / len(n)
+
+
+# U(3, 7)
+uniform(loc=3, scale=4).var() # 1.33333
+
+n = 100
+x = uniform.rvs(size=n, loc=3, scale=4)
+x_bar = np.mean(x)
+
+# 추정한 분산
+var_bar = np.sum((x - x_bar)**2) / n
+
+
+'''
+스튜던트 정리
+
+주어진 검정통계량이 t분포를 따르는지?
+t = (X_bar − μ) / (S / sqrt(n))
+
+'''
+# X_bar 는 평균이 μ, 분산이 σ²/n인 정규분포를 따른다.
+# ★ (n-1) * S² / σ² 는 카이제곱 분포를 따른다 (자유도 n-1)
+# X_bar와 S²는 독립이다.
+# ★ 그래서 (X_bar - μ) / (S / sqrt(n)) 은 t(n-1) 분포를 따른다.
+
+# μ: 10, σ: 2, n: 17
+# student t 정리 : S²는 카이제곱 분포를 따른다 (자유도 n-1) 확인
+mu = 10
+sigma = 2
+n = 17
+data_size = 1000
+x = norm.rvs(loc=mu, scale=sigma, size=(data_size, n))
+result = (n - 1) * x.var(ddof=1, axis=1) / sigma**2
+
+# 카이제곱 분포를 따르는지 시각화
+# 히스토그램: 샘플 데이터
+plt.hist(result, bins=30, density=True, alpha=0.6, color='blue', label='Sample Data')
+
+# 카이제곱 분포 PDF
+x_vals = np.linspace(chi2.ppf(0.001, df=n-1), chi2.ppf(0.999, df=n-1), data_size)
+plt.plot(x_vals, chi2.pdf(x_vals, df=n-1), 'r-', label=f'Chi-squared PDF (df={n-1})')
+
+plt.title('Chi-squared Distribution vs Sample Data')
+plt.xlabel('Value')
+plt.ylabel('Density')
+plt.legend()
+plt.grid()
+plt.show()
+
+# t분포를 따르는지 확인
+# ★ (X_bar - μ) / (S / sqrt(n)) 은 t(n-1) 분포를 따른다.
+# 표본평균과 표본표준편차 계산
+x_bar = x.mean(axis=1)
+s = x.std(axis=1, ddof=1)
+
+# t 통계량 계산
+t_sample = (x_bar - mu) / (s / np.sqrt(n))
+
+# t분포를 따르는지 시각화
+# 히스토그램: 샘플 데이터
+plt.hist(t_sample, bins=30, density=True, alpha=0.6, color='blue', label='Sample Data')
+
+# t 분포 PDF
+x_vals = np.linspace(t.ppf(0.001, df=n-1), t.ppf(0.999, df=n-1), data_size)
+plt.plot(x_vals, t.pdf(x_vals, df=n-1), 'r-', label=f't PDF (df={n-1})')
+
+plt.title('t-Distribution vs Sample Data')
+plt.xlabel('Value')
+plt.ylabel('Density')
+plt.legend()
+plt.grid()
+plt.show()
+
+
+# t검정통계량 계산 예제
+x = np.array([4.62, 4.09, 6.2, 8.24, 0.77, 5.55, 3.11, 11.97, 2.16, 3.24, 10.91, 11.36, 0.87, 9.93, 2.9])
+n = len(x)
+# H0: 모평균이 7이다.
+
+# t 검정통계량 계산
+t_stat = (x.mean() - 7) / (x.std(ddof=1) / np.sqrt(n))
+
+# p-value 계산
+p_value = t.cdf(t_stat, df=n-1)
+p_value = min(1, p_value * 2)  # 양측검정이니까 2를 곱해준다.
+
+p_value < 0.05  # False
+# p-value가 0.05보다 작지 않으므로 귀무가설을 기각할 수 없다.
+# 즉, 모평균이 7이라고 주장할 수 있다.
+
+
+# t 검정통계량 시각화
+k = np.linspace(-4, 4, 1000)
+plt.plot(k, t.pdf(k, df=n-1), label='t-distribution', color='blue')
+plt.axvline(t_stat, color='red', linestyle='--', label=f't-statistic = {t_stat:.2f}')
+
+# 기각 영역을 fill_between으로 시각화
+critical_value = t.ppf(0.975, df=n-1)  # 양측검정, 유의수준 0.05
+plt.fill_between(k, t.pdf(k, df=n-1), where=(k <= -critical_value) | (k >= critical_value), color='red', alpha=0.3, label='Rejection Region')
+
+plt.title('t-test Statistic Visualization')
+plt.xlabel('t-value')
+plt.ylabel('Density')
+plt.legend()
+plt.grid()
+plt.show()
+
+
+
+
+
+
+# 문제 4
+x = np.array([72.4, 74.1, 73.7, 76.5, 75.3, 74.8, 75.9, 73.4, 74.6, 75.1])
+n = len(x)
+# H0: 모평균이 75도씨이다.
+# H1: 모평균이 75도씨가 아니다.
+
+t_stat = (x.mean() - 75) / (x.std(ddof=1) / np.sqrt(n))
+p_value = t.cdf(t_stat, df=n-1)  # p-value 계산
+p_value = min(1, p_value * 2)  # 양측검정이니까 2를 곱해준다.
+
+p_value < 0.05  # False
+# p-value가 0.05보다 작지 않으므로 귀무가설을 기각할 수 없다.
+# 즉, 모평균이 75도씨라고 주장할 수 있다.
+
+# t 검정통계량 시각화
+k = np.linspace(-4, 4, 1000)
+plt.plot(k, t.pdf(k, df=n-1), label='t-distribution', color='blue')
+plt.axvline(t_stat, color='red', linestyle='--', label=f't-statistic = {t_stat:.2f}')
+critical_value = t.ppf(0.975, df=n-1)  # 양측검정, 유의수준 0.05
+plt.fill_between(k, t.pdf(k, df=n-1), where=(k <= -critical_value) | (k >= critical_value), color='red', alpha=0.3, label='Rejection Region')
+plt.xlabel('t-value')
+plt.ylabel('Density')
+plt.legend()
+plt.grid()
+plt.title('t-test Statistic Visualization')
+plt.show()
+
+
+# t 검정의 기본적인 자료 형태는 다음과 같이 데이터가 
+# 벡터 형태로 모든 표본이 같은 그룹으로 묶일 수 있는 형태입니다.
+
+# 학생_ID 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+# 성적90, 85, 88, 92, 95, 80, 78, 85, 90, 95, 88, 92
+# 성별 남, 여, 남, 여, 남, 여, 남, 여, 남, 여, 남, 여 (범주형 변수)
+
+# 이런 형태로 데이터가 주어지면, t 검정을 수행하기 위해서는
+# 성별에 따라 데이터를 분리해야 합니다.
+# 즉, 남학생과 여학생의 성적을 각각 따로 분리해서 t 검정을 수행해야 합니다.
+# 이런 경우에는 독립 2 표본 t 검정을 수행합니다.
+# 귀무가설: 남학생과 여학생의 성적 차이가 없다.
+# 대립가설: 남학생 그룹이 여학생 그룹의 성적보다 높다.
+
+
+# 짝이 지어질 수 있는 데이터
+# 시간 변수가 추가되어 교육 전후의 성적을 비교하는 경우
+# 예를 들어, 학생 A의 교육 전 성적과 교육 후 성적을 비교하는 경우
+# 이런 경우에는 t 검정을 수행하기 위해서는 성적을 짝지어야 합니다.
+# 즉, 학생 A의 교육 전 성적과 교육 후 성적을 짝지어서 t 검정을 수행해야 합니다.
+# 귀무가설: 교육 전과 후의 성적 차이가 없다.
+# 대립가설: 교육 전과 후의 성적 차이가 있다.
+# 이런 경우에는 대응 표본 t 검정을 수행합니다.
+# 귀무가설: 교육 전과 후의 성적 차이가 없다.
+# 대립가설: 교육 후에 성적이 높아졌다.
+
+# 독립 2 표본 t 검정과 대응 표본 t 검정의 차이점은
+# 독립 2 표본 t 검정은 두 그룹의 성적을 비교하는 것이고
+# 대응 표본 t 검정은 한 그룹의 성적을 비교하는 것입니다.
+
+
+'''
+검정 선택 시 고려사항
+t 검정의 형태를 결정할 때, 다음 두 가지를 고려 후 판단합니다.
+1. 그룹 변수가 존재하는가?
+2. 표본들을 짝지을 수 있는 특정 변수가 존재하는가?
+
+위의 질문에 대한 답으로 그룹 변수가 존재하는 경우, 
+데이터의 집단을 그룹 변수의 값에 따라서 2개로 나누어 생각할 수 있는 경우 
+2 표본 t 검정을 선택합니다.
+
+특정 데이터의 경우, 나뉘어진 표본들을 짝을 지을 수 있는 경우가 존재하는데, 
+이 경우 대응 표본 t검정을 선택하고, 그렇지 않은 경우, 독립 2 표본 t 검정을 선택합니다.
+
+'''
+
+# T검정을 할 수 있는 상황/조건
+# 1. 모집단이 정규분포를 따른다.
+# 2. 모집단의 분산이 동일하다. (등분산성)
+# 3. 표본의 크기가 작을 경우 검정의 신뢰도가 떨어질 수 있음.
+
+
+from scipy.stats import ttest_1samp
+
+# 독립 1표본 t 검정 - 모듈 사용
+# H0: 모평균이 10이다.
+x = np.array([9.76, 11.1, 10.7, 10.72, 11.8, 6.15, 10.52, 14.83, 13.03, 16.46, 10.84, 12.45])
+
+t_stat, p_value = ttest_1samp(x, popmean=10, alternative="two-sided")  # x: 표본, 7: 모평균
+(1 - t.cdf(t_stat, df=len(x)-1)) * 2  # p-value 계산
+p_value < 0.05  # False
+# p-value가 0.05보다 작지 않으므로 귀무가설을 기각할 수 없다.
+# 즉, 모평균이 10이라고 주장할 수 있다.
+
+
+
+
+# 독립 2표본 t 검정 - 모듈 사용
+# H0: 남학생과 여학생의 성적 차이가 없다.
+# H1: 남학생 그룹이 여학생 그룹의 성적보다 높다.
+from scipy.stats import ttest_ind
+
+sample = [9.76, 11.1, 10.7, 10.72, 11.8, 6.15, 10.52, 14.83, 13.03, 16.46, 10.84, 12.45]
+gender = ["F"]*7 + ["M"]*5
+my_tab2 = pd.DataFrame({"score": sample, "gender": gender})
+male = my_tab2.loc[my_tab2["gender"] == "M", "score"]
+female = my_tab2.loc[my_tab2["gender"] == "F", "score"]
+
+t_stat2, p_value2 = ttest_ind(male, female, 
+                              equal_var=False, # 동분산 가정 (분산이 같다는 가정)
+                              alternative="greater")  # 첫번째 입력값 평균이 더 크다
+
+# F 검정
+# 귀무가설: 두 그룹의 분산이 같다.
+# 대립가설: 두 그룹의 분산이 다르다.
+from scipy.stats import f
+f_stat = male.var(ddof=1) / female.var(ddof=1)  # F 검정 통계량
+p_val = 1 - f.cdf(f_stat, dfn=len(male) - 1, dfd = len(female))
+p_val *= 2
+# p-value 계산
+
+help(f)
+
+
+
+# 대응 표본 t 검정 - 모듈 사용
+# H0: 교육 전과 후의 성적 차이가 없다.
+# H1: 교육 후에 성적이 높아졌다.
+from scipy.stats import ttest_rel
+
+before = np.array([9.76, 11.1, 10.7, 10.72, 11.8, 6.15])
+after = np.array([10.52, 14.83, 13.03, 16.46, 10.84, 12.45])
+
+help(ttest_rel)
+t_stat3, p_value = ttest_rel(after, before, alternative="greater")  # 첫번째 입력값 평균이 더 크다
+p_value < 0.05  # True
+# p-value가 0.05보다 작으므로 귀무가설을 기각할 수 있다.
+# 즉, 교육 후에 성적이 높아졌다.
+
+
+
+# 직접 계산하기
+# after - before 을 새로운 시리즈로 추가해서 독립 1표본 t 검정을 수행할 수 있다.
+
+# t 검정 통계량을 직접 계산
+t_stat3 = (after.mean() - before.mean()) / (after.std(ddof=1) / np.sqrt(len(after)))
+
+# p-value 계산
+p_value = t.sf(t_stat3, df=len(after)-1)  # p-value 계산
+
+
+
+'''
+두 그룹의 분산이 같은지 다른지 체크하는 방법
+
+두 그룹의 분산이 같은지 같지 않은지 검정하기 위해서는 F 검정을 통해 판단할 수 있습니다.
+F 검정의 핵심 아이디어는 두 그룹에서 추정한 분산의 비율로 두 그룹의 분산이 같은지 측정합니다.
+F 검정은 귀무가설하에서의 검정통계량이 F 분포를 따르기 때문에 붙여진 이름입니다.
+'''
+# 표본1의 분산 / 표본2의 분산 = F 검정 통계량
+# H0: 두 그룹의 분산이 같다.
+# H1: 두 그룹의 분산이 다르다.
+# F 검정
+oj_lengths = np.array([17.6, 9.7, 16.5, 12.0, 21.5, 23.3, 23.6, 26.4, 20.0, 25.2,
+25.8, 21.2, 14.5, 27.3, 23.8]) # OJ 그룹 데이터 (15개)
+
+vc_lengths = np.array([7.6, 4.2, 10.0, 11.5, 7.3, 5.8, 14.5, 10.6, 8.2, 9.4,
+16.5, 9.7, 8.3, 13.6, 8.2]) 
+
+s1 = oj_lengths.std(ddof=1)
+s2 = vc_lengths.std(ddof=1)
+
+f_stat = s1**2 / s2**2
+p_val = f.sf(f_stat, dfn=len(oj_lengths)-1, dfd=len(vc_lengths)-1) * 2 # p-value 계산
+
+from scipy.stats import levene, bartlett
+levene(oj_lengths, vc_lengths)  # Levene's test
+bartlett(oj_lengths, vc_lengths)  # Bartlett's test
+
+
+
+'''
+문제 풀이
+
+'''
+
+'''
+연습문제 1
+표본의 크기가 10이고, 모표준편차를 모르는 상황에서 표본평균이 50, 
+표본표준편차가 4일 때, t분포를 이용해  P(T<= 1.812) 를 구하시오.
+'''
+n = 10
+t.cdf(1.812, df=n-1)
+
+
+'''
+연습문제 2
+표본의 크기가 15이고, 자유도 14인 
+t분포에서 누적확률 0.95에 해당하는 
+t값을 구하시오.
+'''
+n = 14
+t.ppf(0.95, df=n)
+
+
+# 연습문제 3
+# 평균이 60이고, 표준편차는 모름. 표본크기 12일 때, 
+# P(T>2.18) 일 확률을 구하시오. 
+
+t.sf(2.18, df=11)
+
+
+# 연습문제 4
+# 자동차의 연비는 정규분포를 따른다고 가정한다. 
+# 평균 연비가 12km/L이고 표준편차가 1.5km/L인 상황에서 
+# 연비가 10km/L 이상일 확률을 파이썬 코드로 계산하시오.
+norm.sf(loc=12, scale=1.5, x=10)
+
+
+# 연습문제 5
+# 직원들의 하루 평균 업무시간은 8시간이고, 
+# 표준편차는 0.8시간이라고 알려져 있다. 
+# 하루 9시간 이상 근무할 확률을 파이썬 코드로 계산하시오. 
+# 업무시간은 정규분포를 따른다고 가정한다.
+norm.sf(loc=8, x=9, scale=0.8)
+
+
+
+'''
+
+연습문제 6
+한 프랜차이즈 커피숍은 고객 대기시간을 평균 5분 이하로 유지하려고 합니다. 
+50명의 고객을 무작위로 조사한 결과, 대기시간 평균은 5.4분, 
+표준편차는 1.2분이었습니다. 대기시간이 평균 5분을 초과하는지 확인하려고 합니다. 
+(모표준편차를 안다고 가정)
+
+귀무가설과 대립가설을 설정하시오.
+유의수준 5%에서 검정통계량과 p-value를 계산하고 가설을 판단하시오.
+'''
+# 귀무가설: 대기시간 평균이 5분 이하이다.
+# 대립가설: 대기시간 평균이 5분을 초과한다.
+z = (5.4 - 5) / (1.2 / np.sqrt(50))  # 검정통계량
+p_val = norm.sf(z)  # p-value 계산
+p_val < 0.05  # True
+# 귀무가설을 기각할 수 있다.
+# 즉, 대기시간이 평균 5분을 초과한다고 주장할 수 있다.
+
+
+
+
+'''
+연습문제 7
+평균 체온은 36.5도라고 알려져 있습니다. 
+어떤 실험에서 15명의 체온 측정 결과는 다음과 같습니다:
+
+
+1. 귀무가설과 대립가설을 설정하시오.
+2. 평균 체온이 36.5도와 다른지 검정하시오.
+3. 평균 체온에 대한 95% 신뢰구간을 구하시오.
+'''
+
+
+x = np.array([36.3, 36.7, 36.6, 36.5, 36.8, 36.6, 36.4, 36.7, 36.5, 36.3, 36.9, 36.4, 36.2, 36.8, 36.6])
+n = len(x)
+# 귀무가설: 평균 체온은 36.5도이다.
+# 대립가설: 평균 체온은 36.5도가 아니다.
+
+tstat, pval = ttest_1samp(x, popmean=36.5, alternative="two-sided")
+pval < 0.05  # False
+# p-value가 0.05보다 작지 않으므로 귀무가설을 기각할 수 없다.
+# 즉, 평균 체온은 36.5도라고 주장할 수 있다.
+
+
+
+'''
+연습문제 8
+한 피자 업체의 평균 배달 시간이 30분을 초과하는지 확인하려고 합니다. 
+40명의 배달 시간 샘플 평균은 32분, 표준편차는 5분이었습니다.
+
+귀무가설과 대립가설을 설정하시오.
+Z-검정을 통해 배달 시간이 평균보다 긴지 확인하시오.
+'''
+# H0: 평균 배달 시간이 30분 이하이다.
+# H1: 평균 배달 시간이 30분을 초과한다.
+z = (32 - 30) / 5 / np.sqrt(40)  # 검정통계량
+p_val = norm.sf(z)
+p_val < 0.05  # False   
+# 귀무가설 기각 X 평균 배달 시간이 30분 이하
+
+
+'''
+연습문제 9
+고등학생 평균 수면시간이 7시간과 다른지 확인하려고 합니다. 
+12명의 샘플 수면시간은 다음과 같습니다:
+
+
+1. 귀무가설과 대립가설을 설정하시오.
+2. 평균 수면시간이 7시간과 다른지 검정하시오.
+3. 평균 수면시간의 95% 신뢰구간을 구하시오.
+'''
+x = np.array([6.5, 6.2, 6.8, 7.1, 6.7, 7.3, 6.9, 7.4, 6.6, 6.8, 7.0, 7.2])
+# 귀무가설: 고등학생 평균 수면시간이 7시간이다.
+# 대립가설: 고등학생 평균 수면시간이 7시간이 아니다.
+tstat, pval = ttest_1samp(x, popmean=7, alternative="two-sided")
+p_val < 0.05    # False
+# p-value가 0.05보다 작지 않으므로 귀무가설을 기각할 수 없다.
+# 즉, 평균 수면시간이 7시간이라고 주장할 수 있다.
+
+critical_value = t.ppf(0.975, df=len(x)-1)
+
+# 95% 신뢰구간 계산
+lower_bound = x.mean() - critical_value * (x.std(ddof=1) / np.sqrt(len(x)))
+upper_bound = x.mean() + critical_value * (x.std(ddof=1) / np.sqrt(len(x)))
+print(lower_bound, upper_bound)
+
+
+'''
+연습문제 10
+다이어트 프로그램에 참가한 10명의 참가자들의 체중 변화 전후는 다음과 같습니다:
+
+Before: 75, 72, 78, 80, 69, 77, 73, 76, 74, 71
+After: 72, 70, 75, 78, 67, 74, 71, 74, 72, 69
+다이어트 프로그램이 체중 감소에 효과가 있는지 확인하려고 합니다.
+
+귀무가설과 대립가설을 설정하시오.
+대응표본 t-검정을 통해 평균 체중이 감소했는지 검정하시오.
+
+귀무가설: 체중 변화가 없다.
+대립가설: 체중 변화가 있다.
+'''
+before = np.array([75, 72, 78, 80, 69, 77, 73, 76, 74, 71])
+after = np.array([72, 70, 75, 78, 67, 74, 71, 74, 72, 69])
+help(ttest_rel)
+tstat, pval = ttest_rel(after, before, alternative="less")
+p_val < 0.05  # False
+# p-value가 0.05보다 작지 않으므로 귀무가설을 기각할 수 없다.
+# 즉, 평균 체중이 감소했다고 주장할 수 없다.
