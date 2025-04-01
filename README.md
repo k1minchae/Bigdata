@@ -48,6 +48,8 @@
 
 [통계 검정 학습](statistics/estimation.py)
 
+[t분포와 f분포 연습문제](statistics/tstat-fstat.py)
+
 ### 6. 실습
 
 [학생 데이터 전처리](practice/student-data-practice.py)
