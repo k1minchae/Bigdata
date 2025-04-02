@@ -632,6 +632,10 @@ s2 = vc_lengths.std(ddof=1)
 f_stat = s1**2 / s2**2
 p_val = f.sf(f_stat, dfn=len(oj_lengths)-1, dfd=len(vc_lengths)-1) * 2 # p-value 계산
 
+f.cdf(s2**2/s1**2, 14, 14)  # 왼쪽 p-value 계산
+1 - f.cdf(s1**2/s2**2, 14, 14)  # 오른쪽 p-value 계산
+
+# F 검정 통계량과 p-value 계산
 from scipy.stats import levene, bartlett
 levene(oj_lengths, vc_lengths)  # Levene's test
 bartlett(oj_lengths, vc_lengths)  # Bartlett's test
