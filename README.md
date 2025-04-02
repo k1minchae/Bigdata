@@ -46,9 +46,13 @@
 
 [여러 통계 분포](statistics/distribution.py)
 
-[통계 검정 학습](statistics/estimation.py)
+[통계 검정 학습](statistics/hypothesis-test.py)
 
 [t분포와 f분포 연습문제](statistics/tstat-fstat.py)
+
+[특정 분포를 따르는 지 검정](statistics/distribution-test.py)
+
+[카이 제곱 검정](statistics/chi-squared-test.py)
 
 ### 6. 실습
 
