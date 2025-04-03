@@ -54,6 +54,8 @@
 
 [카이 제곱 검정](statistics/chi-squared-test.py)
 
+[분포 비교 방법 연습문제](statistics/distribution-test-pract.py)
+
 ### 6. 실습
 
 [학생 데이터 전처리](practice/student-data-practice.py)
