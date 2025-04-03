@@ -54,6 +54,8 @@
 
 [카이 제곱 검정](statistics/chi-squared-test.py)
 
+[독립성 검정 (by 카이제곱) 연습문제](statistics/chi-practice.py)
+
 [분포 비교 방법 연습문제](statistics/distribution-test-pract.py)
 
 ### 6. 실습
