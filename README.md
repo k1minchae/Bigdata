@@ -58,6 +58,10 @@
 
 [분포 비교 방법 연습문제](statistics/distribution-test-pract.py)
 
+[anova 검정](statistics/anova.py)
+
+[anova 검정 연습문제](statistics/anova_practice.py)
+
 ### 6. 실습
 
 [학생 데이터 전처리](practice/student-data-practice.py)
