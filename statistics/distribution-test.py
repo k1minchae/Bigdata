@@ -5,6 +5,9 @@ from scipy.stats import ttest_ind, f, ttest_rel, norm
 from scipy import stats as sp
 import seaborn as sns
 
+plt.rcParams['font.family'] ='Malgun Gothic'
+plt.rcParams['axes.unicode_minus'] =False
+
 # p-th percentile 구하는 방법
 # 1. 데이터 순서대로 정렬
 # 2. (n - 1) * p + 1계산한다.
@@ -71,10 +74,10 @@ norm.ppf(0.75, loc=np.mean(x), scale=x.std(ddof=1))  # 131.0
 plt.hist(x, density=True, bins=10, alpha=0.5, color='g')
 k = np.linspace(30, 170, 10000)
 plt.plot(k, norm.pdf(k, loc=np.mean(x), scale=x.std(ddof=1)), color='r')
-plt.title('Sample Data and Norm Distribution')
-plt.xlabel('Value')
-plt.ylabel('Density')
-plt.legend(['norm', 'sample'])
+plt.title('내 데이터와 정규분포 비교하기')
+plt.xlabel('값')
+plt.ylabel('밀도')
+plt.legend(['정규분포', '내 데이터'])
 plt.show()
 
 
@@ -87,6 +90,8 @@ data_x = np.array([4.62, 4.09, 6.2, 8.24, 0.77, 5.55,
 # qqplot 그리기
 sp.probplot(data_x, dist="norm", plot=plt)
 plt.title('QQ Plot')
+plt.xlabel("이론 분포의 분위수")
+plt.ylabel("실제 데이터의 분위수")
 plt.grid()
 plt.show()
 
@@ -131,14 +136,14 @@ data_x = np.array([4.62, 4.09, 6.2, 8.24, 0.77, 5.55, 3.11,
 ecdf = ECDF(data_x)
 x = np.linspace(min(data_x), max(data_x))
 y = ecdf(x)
-plt.plot(x,y,marker='_', linestyle='none')
+plt.plot(x, y, marker='_', linestyle='none')
 
 k = np.linspace(-2, 13, 100)
 cdf_k = norm.cdf(k, loc=data_x.mean(), scale=data_x.std(ddof=1))
 plt.plot(k, cdf_k, color='r')
 
-plt.title("Estimated CDF")
-plt.xlabel("X-axis")
+plt.title("추정된 누적분포함수")
+plt.xlabel("X축")
 plt.ylabel("ECDF")
 plt.show()
 

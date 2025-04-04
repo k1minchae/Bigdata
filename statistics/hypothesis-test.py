@@ -209,19 +209,23 @@ plt.plot(z_vals, pdf_vals, label='Standard Normal Distribution')
 
 # z 점 위치 선
 plt.axvline(z, color='red', linestyle='--', label=f'z = {z:.2f}')
-plt.axvline(-z, color='red', linestyle='--')  # 양측검정이니까 -z도 표시
+# plt.axvline(-z, color='red', linestyle='--')  # 양측검정이니까 -z도 표시
+
+# 기각 영역 색칠 (양측검정)
+critical_value = norm.ppf(0.975)  # 유의수준 0.05, 양측검정
+x_shade_right = np.linspace(critical_value, 4, 100)
+x_shade_left = np.linspace(-4, -critical_value, 100)
+plt.fill_between(x_shade_right, norm.pdf(x_shade_right), color='blue', alpha=0.3, label='Rejection Region')
+plt.fill_between(x_shade_left, norm.pdf(x_shade_left), color='blue', alpha=0.3)
 
 # p-value 영역 색칠 (양측검정)
 z_abs = abs(z)
-x_shade_right = np.linspace(z_abs, 4, 100)
-x_shade_left = np.linspace(-4, -z_abs, 100)
-plt.fill_between(x_shade_right, norm.pdf(x_shade_right), color='red', alpha=0.3)
-plt.fill_between(x_shade_left, norm.pdf(x_shade_left), color='red', alpha=0.3)
-
+x_pval_right = np.linspace(z_abs, 4, 100)
+x_pval_left = np.linspace(-4, -z_abs, 100)
 
 # 텍스트 추가
 plt.text(z + 0.1, 0.02, f'z = {z:.2f}', color='red')
-plt.title('Z-test Visualization with p-value Region (Two-tailed)')
+plt.title('Z-test Visualization with Rejection and p-value Regions (Two-tailed)')
 plt.xlabel('Z-value')
 plt.ylabel('Probability Density')
 plt.legend()
@@ -240,8 +244,7 @@ k = np.linspace(-3, 3, 100)
 
 # 자유도에 따른 t 분포의 모양 확인
 plt.figure(figsize=(8, 6))
-for df in [1, 3]:  # 다양한 자유도
-    plt.plot(k, t.pdf(k, df=df), label=f'df={df}')
+plt.plot(k, t.pdf(k, df=30), label=f'df={30}')
 
 # 표준 정규분포와 비교
 plt.plot(k, norm.pdf(k), label='Normal Distribution', linestyle='--', color='black')
