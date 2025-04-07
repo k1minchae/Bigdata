@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+plt.rcParams['font.family'] ='Malgun Gothic'
+plt.rcParams['axes.unicode_minus'] =False
 
 '''
 분산분석은 3개 이상의 집단 간 평균 차이가 
@@ -49,15 +51,102 @@ import seaborn as sns
 
 '''
 
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
+import numpy as np
+from scipy.stats import ttest_ind
 
-tukey = pairwise_tukeyhsd(
-endog=anova_data['Minutes'],    # 종속변수
-groups=anova_data['Odor'],      # 그룹 레발 정하기
-alpha=0.05)                     # 유의수준 0.05로 설정
+np.random.seed(42)
+
+def run_ttest_simulation(n, iterations):
+    type1_error_count = 0
+
+    for _ in range(iterations):
+        # 실제로는 모두 평균 100인 동일한 그룹
+        group_a = np.random.normal(loc=100, scale=10, size=n)
+        group_b = np.random.normal(loc=100, scale=10, size=n)
+        group_c = np.random.normal(loc=100, scale=10, size=n)
+
+        # 3쌍 비교: A-B, A-C, B-C
+        p1 = ttest_ind(group_a, group_b).pvalue
+        p2 = ttest_ind(group_a, group_c).pvalue
+        p3 = ttest_ind(group_b, group_c).pvalue
+
+        # 유의수준 0.05보다 작은 p-value가 하나라도 있으면 → 1종 오류 발생
+        if p1 < 0.05 or p2 < 0.05 or p3 < 0.05:
+            type1_error_count += 1
+
+    return type1_error_count / iterations
+
+# 1000 번 실행해보자
+error_rate = run_ttest_simulation(30, 1000)
+print(f"1종 오류가 발생한 비율: {error_rate:.3f}")
+
+
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+import pandas as pd
+
+# 가짜 데이터 준비
+group = np.array(['A']*30 + ['B']*30 + ['C']*30)
+value = np.random.normal(loc=100, scale=10, size=90)
+df = pd.DataFrame({'group': group, 'value': value})
+
+# Tukey HSD 수행
+tukey = pairwise_tukeyhsd(endog=df['value'], groups=df['group'], alpha=0.05)
 print(tukey)
 
 
-# Tukey HSD 는 전체 유의수준을 맞춰서 결과를 내보내준다.
+
+from statsmodels.stats.multicomp import MultiComparison
+from scipy import stats
+
+import numpy as np
+import pandas as pd
+
+odors = ['Lavender', 'Rosemary', 'Peppermint']
+
+# 각 향기에서 손님이 머물다 간 시간(분) 데이터
+# 향기가 머무는 시간에 영향을 미치는지 확인하자.
+minutes_lavender = [10, 12, 11, 9, 8, 12, 11, 10, 10]
+minutes_rose = [14, 15, 13, 16, 14, 15, 14, 13, 14, 16]
+minutes_mint = [18, 17, 18, 16, 17, 19, 18, 17]
+anova_data = pd.DataFrame({
+    'odor': np.array(["Lavender"] * 9 + ["Rosemary"] * 10 + ["Peppermint"] * 8),
+    'minutes': minutes_lavender + minutes_rose + minutes_mint
+})
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# 시각화
+sns.boxplot(x='odor', y='minutes', data=anova_data, palette='Set2')
+plt.title('향기별 머무는 시간')
+plt.ylabel('머무는 시간(분)')
+plt.xlabel('')
+plt.show()
+
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+tukey = pairwise_tukeyhsd(
+    endog=anova_data['minutes'],   # 종속변수
+    groups=anova_data['odor'],     # 그룹
+    alpha=0.05                     # 유의수준
+)
+print(tukey)
 
 
+from scipy.stats import levene
+
+# 그룹별로 나눠서 잔차 or 원값 비교
+minutes_lavender = np.array([10, 12, 11, 9, 8, 12, 11, 10, 10])
+minutes_rose = np.array([14, 15, 13, 16, 14, 15, 14, 13, 14, 16])
+minutes_mint = np.array([18, 17, 18, 16, 17, 19, 18, 17])
+
+# Levene Test 수행
+stat, p = levene(minutes_lavender, minutes_mint, minutes_rose)
+
+print(f"Levene 검정 통계량: {stat:.4f}")
+print(f"p-value: {p:.4f}")
+
+if p > 0.05:
+    print("✅ 등분산성 만족 → Tukey HSD 사용 가능")
+else:
+    print("❌ 등분산성 불만족 → 다른 방법 고려 필요")
