@@ -124,3 +124,95 @@ from statsmodels.formula.api import ols
 
 res_vec = model = ols('minutes ~ C(odor)', data=anova_data).fit()
 anova_table = sm.stats.anova_lm(model, typ=2)
+
+
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import ols
+
+# 데이터 생성
+np.random.seed(42)
+seoul = np.random.normal(2.8, 0.3, size=30)
+busan = np.random.normal(2.9, 0.3, size=30)
+jeju  = np.random.normal(3.5, 0.3, size=30)
+
+# DataFrame 만들기
+df = pd.DataFrame({
+    'consumption': np.concatenate([seoul, busan, jeju]),
+    'region': ['Seoul'] * 30 + ['Busan'] * 30 + ['Jeju'] * 30
+})
+
+# 확인
+df.head()
+
+# 모델 적합
+model = ols('consumption ~ C(region)', data=df).fit()
+
+
+
+
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# OLS 모델 적합 (분산분석 모델)
+model = ols('consumption ~ C(region)', data=df).fit()
+
+
+
+
+
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+
+# 잔차 추출
+residuals = model.resid
+
+sm.qqplot(residuals, line='s')
+plt.title("잔차의 Q-Q Plot (정규성 시각화)")
+plt.tight_layout()
+plt.show()
+
+
+
+
+
+
+from scipy.stats import shapiro
+
+stat, p = shapiro(residuals)
+print(f'잔차 정규성 검정 (Shapiro-Wilk): p-value = {p:.4f}')
+
+
+
+
+# 잔차 등분산성 검정
+from scipy.stats import levene
+
+# 그룹별 잔차 분리
+grouped_resid = [residuals[df['region'] == g] for g in df['region'].unique()]
+
+# Levene's Test
+stat, p = levene(*grouped_resid)
+print(f"Levene 검정 통계량: {stat:.4f}")
+print(f"p-value: {p:.4f}")
+
+# 결과 해석
+if p > 0.05:
+    print("✅ 등분산성 만족 (귀무가설 채택)")
+else:
+    print("❌ 등분산성 불만족 (귀무가설 기각)")
+
+
+
+# 시각화
+import matplotlib.pyplot as plt
+
+fitted = model.fittedvalues  # 예측값
+plt.scatter(fitted, residuals)
+plt.axhline(0, color='red', linestyle='--')
+plt.xlabel("예측값 (Fitted values)")
+plt.ylabel("잔차 (Residuals)")
+plt.title("잔차 vs 예측값 플롯 (등분산성 확인)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
