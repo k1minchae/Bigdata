@@ -262,3 +262,25 @@ print(f"최소값 f(β): {np.sum((y - X.dot(beta_opt))**2)}")
 
 np.random.seed(408)
 np.random.randint(1, 8)
+
+
+
+
+# sympy 사용하기
+import sympy as sp
+
+# x를 정의
+x = sp.symbols('x')
+
+# 함수 f(x)정의
+f = 4 * (x - 2)**2
+
+# 도함수 정의
+f_diff = sp.diff(f, x)
+
+# sympy 함수들을 numpy 에서 사용할 수 있도록 변환
+f_np = sp.lambdify(x, f, 'numpy')
+f_diff_np = sp.lambdify(x, f_diff, 'numpy')
+
+
+
