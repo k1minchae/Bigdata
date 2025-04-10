@@ -108,3 +108,87 @@ from scipy.stats import brunnermunzel
 
 
 
+'''
+
+연습문제
+
+'''
+import pandas as pd
+import numpy as np
+
+# 1번
+brand_a = [35.2, 35.5, 35.6, 35.7, 35.8]
+brand_b = [36.2, 37.0, 38.2, 38.0, 39.5]
+data = pd.DataFrame({
+    'Product': ['A'] * 5 + ['B'] * 5,
+    'Quantity': brand_a + brand_b
+})
+
+# 두 제품 브랜드 간 포장 단위당 실제 중량 차이가 있는지 알아보기 위해 
+# 비모수 검정을 실시하시오.
+
+from scipy.stats import levene, mannwhitneyu
+stat, pval = levene(brand_a, brand_b)
+pval < 0.05
+# 동분산성 만족 => 독립 2표본 t검정 => 맨휘트니 U 검정
+
+stat, p = mannwhitneyu(brand_a, brand_b, alternative='two-sided')
+p < 0.05 # True
+# 귀무가설 기각: 두 브랜드 간 실제 중량차이가 있다.
+
+
+
+
+
+# 2번
+# 데이터 설명
+
+# Trained : 훈련을 받은 그룹의 시험 점수
+# Untrained : 훈련을 받지 않은 그룹의 시험 점수 (같은 쌍에서 추출)
+trained = np.array([115, 123, 137, 140, 130])
+untrained = np.array([113, 119, 130, 134, 125])
+
+from scipy.stats import wilcoxon
+
+stat, pval = wilcoxon(trained, untrained)
+pval < 0.05
+# 귀무가설 기각 X
+# 훈련을 받은 그룹과 받지 않은 그룹과 차이가 없다.
+
+
+
+
+# 3번
+
+# 데이터 설명
+
+# Group : 평가 그룹 (전문가, 초급자, 학생)
+# Accuracy : 테스트 정답 수
+
+data = {
+    'Experts': [82, 80, 85, 83, 88],
+    'Novices': [77, 70, 74, 79, 73],
+    'Students': [68, 72, 75, 73, 70]
+}
+df = pd.DataFrame(data)
+
+from scipy.stats import kruskal
+stat, pval = kruskal(df['Experts'], df['Novices'], df['Students'])
+pval < 0.05 # True
+# 세 집단 간 차이 O
+
+
+
+
+# 4번
+# 데이터 설명
+
+# DrugA, DrugB : 두 가지 약물을 복용한 후 반응 시간 (초)
+drugA = [1.82, 2.12, 1.74, 2.10, 1.65, 1.91, 2.45]
+drugB = [2.22, 2.48, 2.15, 2.68, 2.60, 4.65]
+stat, pval = levene(drugA, drugB)
+pval < 0.05 # 등분산성 만족
+
+stat, pval = mannwhitneyu(drugA, drugB, alternative='two-sided')
+pval < 0.05     # True
+# 두 약물간 반응 시간 차이가 유의미하다.
