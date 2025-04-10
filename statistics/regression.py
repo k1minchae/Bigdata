@@ -397,76 +397,6 @@ plt.show()
 
 
 
-
-# 2. 주형님 코드
-x = np.array([4,7,13,2,1,5,9])
-
-def f_beta(x, beta):
-    return sum((x-beta)**2)
-
-def f_prime_beta(x, beta):
-    return -2 * sum(x-beta)
-
-
-def gradient_descent_2(x, init_beta, step, n):
-    beta = init_beta
-    history = np.zeros(n + 1)
-    history[0] = beta
-    for i in range(1, n + 1):
-        beta = beta - step * f_prime_beta(x, beta)
-        history[i] = beta
-    return beta, history
-
-# 실행
-final_beta, B_vals = gradient_descent_2(x, init_beta=3.0, step=0.01, n=50)
-
-# 각 B에 대응하는 f(B) 값 계산
-f_vals = np.array([f_beta(x, b) for b in B_vals])
-
-# 손실 함수 곡선 그리기 위한 범위 설정
-k = np.linspace(-1, 15, 200)
-f_curve = np.array([f_beta(x, beta) for beta in k])
-
-# 시각화 시작
-plt.figure(figsize=(10, 6))
-
-# 손실 함수 곡선
-plt.plot(k, f_curve, color='blue', label=r'$f(B) = \sum{(x_i - B)^2}$')
-
-# 해석적 최소값 (평균값) 표시
-plt.axvline(np.mean(x), color='red', linestyle='--', label=f'최소값 = {np.mean(x):.2f}')
-
-plt.scatter(B_vals, f_vals, color='orange', zorder=5, label='경사하강법 경로')
-
-
-
-# 최종 수렴 지점 강조
-plt.scatter(B_vals[-1], f_vals[-1], color='black', s=100, label='최종 수렴 지점')
-
-
-plt.plot(B_vals, f_vals, color='orange', linestyle='--', alpha=0.5)
-
-# 제목 및 축 라벨
-plt.title('경사하강법 수렴 과정 (gradient_descent_2 버전)')
-plt.xlabel('B')
-plt.ylabel('f(B)')
-plt.legend()
-plt.grid(True)
-plt.show()
-
-# 결과 출력
-print(f"최종 수렴값 B = {round(B_vals[-1], 3)}")
-
-
-f_beta(x, 1)
-f_prime_beta(x, 1)
-
-
-
-
-
-
-
 # 3. f(x1, x2) = 4(x1^2) + 2(x2 - 1/2)^2
 # 경사하강법을 통해서 f(x1, x2)의 최소값을 찾아보세요.
 
@@ -555,7 +485,7 @@ def grad_f(B1, B2):
 # 4. 경사하강법 초기 설정
 B = np.array([0.0, 0.0])      # B = [B1, B2] 초기값 (0, 0)에서 시작
 learning_rate = 0.001         # 러닝레이트 (한 번에 이동하는 크기)
-epochs = 10000               # 반복 횟수
+epochs = 5000               # 반복 횟수
 path = [B.copy()]             # 경로 기록을 위한 리스트
 
 # 5. 경사하강법 반복 실행
