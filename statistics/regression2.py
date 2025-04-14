@@ -370,6 +370,8 @@ df = cal.frame
 model = ols('MedHouseVal ~ AveRooms + AveOccup', data=df).fit()
 print(model.summary())
 # 회귀식: MedHouseVal = -0.0708 * AveRooms + -0.0026 * AveOccup + 1.6919
+# 회귀식: 
+
 
 # p-value ㅔ들은 AveOccup 만 0.001 이고, 나머지는 다 0.000 이므로 유의미하다.
 
@@ -383,10 +385,12 @@ model = ols('MedHouseVal ~ AveRooms + AveOccup', data=df).fit()
 
 # 7.
 df['IncomeLevel'] = pd.qcut(df['MedInc'], q=3, labels=['Low', 'Mid', 'High'])
+# C라고 하면 더미코딩 지정됨
 model = ols('MedHouseVal ~ AveRooms + AveOccup + C(IncomeLevel)', data=df).fit()
 # 범주형 변수 IncomeLevel에서 가장 유의미한 더미 변수는 무엇인가?
 print(model.summary())  # C(IncomeLevel)[T.High] , 1.6558
 # 해당 변수의 회귀 계수를 구하세요.
+# 만약에 변수 1개가 유효하지 않다고 하더라도 함부로 뺄 수 없다.
 
 
 
@@ -394,9 +398,10 @@ print(model.summary())  # C(IncomeLevel)[T.High] , 1.6558
 from statsmodels.stats.stattools import durbin_watson
 dw_stat = durbin_watson(model.resid)
 print(dw_stat)
-# dw_stat = 2.0 이면 잔차가 독립적이다.
+# dw_stat이 2.0에 가까우면 잔차가 독립적이다.
 # dw_stat < 2.0 이면 잔차가 양의 자기상관관계가 있다.
 # dw_stat > 2.0 이면 잔차가 음의 자기상관관계가 있다.
+# 자기상관은 1차까지만 봄.
 
 # dw_stat 이 0.6인경우
 # 잔차가 양의 자기상관관계가 있다.
