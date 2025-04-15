@@ -158,5 +158,3 @@ Step wise 방법 : 단계별로 변수를 추가해나가면서 최적의 모델
 AIC, BIC 
 Base stepwise method
 '''
-
-
