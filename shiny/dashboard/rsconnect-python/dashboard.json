@@ -1,0 +1,12 @@
+{
+    "https://api.shinyapps.io": {
+        "server_url": "https://api.shinyapps.io",
+        "filename": "C:\\Users\\USER\\Desktop\\TIL\\bigdata\\shiny\\dashboard",
+        "app_url": "https://minchae.shinyapps.io/my-dashboard/",
+        "app_id": 14733907,
+        "app_guid": null,
+        "title": "my-dashboard",
+        "app_mode": "python-shiny",
+        "app_store_version": 1
+    }
+}
